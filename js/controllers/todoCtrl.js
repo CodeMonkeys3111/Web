@@ -51,7 +51,6 @@ var queryReplies = echoRefReplies.orderByChild("order");
 $scope.todos = $firebaseArray(query);
 $scope.todosReplies = $firebaseArray(queryReplies);
 
-//$scope.input.wholeMsg = '';
 $scope.editedTodo = null;
 
 
@@ -72,9 +71,9 @@ $scope.$watchCollection('todos', function () {
 
 		// set time
 		todo.dateString = new Date(todo.timestamp).toString();
-		todo.tags = todo.wholeMsg.match(/#\w+/g);
-
-		todo.trustedDesc = $sce.trustAsHtml($scope.XssProtection(todo.linkedDesc));
+		
+		//TODO: create tags for head and desc
+		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word charcters
 		
 	});
 
@@ -90,10 +89,6 @@ $scope.$watchCollection('todosReplies', function () {
 	var total = 0;
 	var remaining = 0;
 	$scope.todosReplies.forEach(function (reply) {
-		// Skip invalid entries so they don't break the entire app.
-		//if (!reply || !reply.head ) {
-		//	return;
-		//}
 
 		total++;
 		if (reply.completed === false) {
@@ -102,9 +97,6 @@ $scope.$watchCollection('todosReplies', function () {
 
 		// set time
 		reply.dateString = new Date(reply.timestamp).toString();
-		reply.tags = reply.wholeMsg.match(/#\w+/g);
-
-		reply.trustedDesc = $sce.trustAsHtml($scope.XssProtection(reply.linkedDesc));
 		
 	});
 
@@ -139,9 +131,11 @@ $scope.getFirstAndRestSentence = function($string) {
 };
 
 // Post question
-$scope.addTodo = function () {
-	var newTodo = $scope.input.wholeMsg.trim();
+$scope.doAsk = function () {
+	// TODO: create input.head
+	var newTodo = $scope.input.head.trim();
 
+	// TODO: adapt for head and desc
 	// No input, so just do nothing
 	if (!newTodo.length) {
 		return;
@@ -149,29 +143,29 @@ $scope.addTodo = function () {
 
 	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
 	var head = firstAndLast[0];
-	var desc = $scope.XssProtection(firstAndLast[1]);
+	var desc = firstAndLast[1];
+	
 
 	$scope.todos.$add({
-		wholeMsg: newTodo,
 		wholeMsgReply: '',
 		head: head,
-		headLastChar: head.slice(-1),
 		desc: desc,
-		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
 		completed: false,
 		timestamp: new Date().getTime(),
 		tags: "...",
-		echo: 0,
+		like: 0,
+		dislike: 0,
 		order: 0,
 		replies: 0
 	});
 	// remove the posted question in the input
-	$scope.input.wholeMsg = '';
+	$scope.input.head = '';
+	$scope.input.desc = '';
 };
 
 
 // Reply to Question
-$scope.replyTodo = function (todo) {
+$scope.doReply = function (todo) {
 	
 	var newTodo = todo.wholeMsgReply.trim();
 	
@@ -185,23 +179,19 @@ $scope.replyTodo = function (todo) {
 	$scope.todos.$save(todo);
 	
 	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-	var head = firstAndLast[0];
-	var desc = $scope.XssProtection(firstAndLast[1]);
+
+	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
+	var desc = $scope.XssProtection(newTodo);
 	
 	$scope.todosReplies.$add({
-		wholeMsg: newTodo,
-		wholeMsgReply: '',
-		head: head,
-		headLastChar: head.slice(-1),
 		desc: desc,
 		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
 		completed: false,
 		timestamp: new Date().getTime(),
-		tags: "...",
-		echo: 0,
+		like: 0,
+		dislike: 0,	
 		order: 0,
 		parentID: todo.$id,
-		replies: 0
 	});
 	// remove the posted question in the input
 	todo.wholeMsgReply = '';
@@ -216,9 +206,9 @@ $scope.editTodo = function (todo) {
 	$scope.originalTodo = angular.extend({}, $scope.editedTodo);
 };
 
-$scope.upEcho = function (todo) {
+$scope.doLike = function (todo) {
 	$scope.editedTodo = todo;
-	todo.echo = todo.echo + 1;
+	todo.like = todo.like + 1;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
 	$scope.todos.$save(todo);
@@ -227,9 +217,9 @@ $scope.upEcho = function (todo) {
 	$scope.$storage[todo.$id] = "echoed";
 };
 
-$scope.downEcho = function (todo) {
+$scope.doDislike = function (todo) {
 	$scope.editedTodo = todo;
-	todo.echo = todo.echo - 1;
+	todo.dislike = todo.dislike + 1;
 	// Hack to order using this order.
 	todo.order = todo.order +1;
 	$scope.todos.$save(todo);
@@ -240,8 +230,8 @@ $scope.downEcho = function (todo) {
 
 $scope.doneEditing = function (todo) {
 	$scope.editedTodo = null;
-	var wholeMsg = todo.wholeMsg.trim();
-	if (wholeMsg) {
+	var head = todo.head.trim();
+	if (head) {
 		$scope.todos.$save(todo);
 	} else {
 		$scope.removeTodo(todo);
@@ -249,7 +239,7 @@ $scope.doneEditing = function (todo) {
 };
 
 $scope.revertEditing = function (todo) {
-	todo.wholeMsg = $scope.originalTodo.wholeMsg;
+	todo.head = $scope.originalTodo.head;
 	$scope.doneEditing(todo);
 };
 
