@@ -32,7 +32,7 @@ if (!roomId || roomId.length === 0) {
 	roomId = "all";
 }
 
-// TODO: Please change this URL for your app
+// Kaichen's firebase account
 var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
 
 
@@ -133,17 +133,20 @@ $scope.getFirstAndRestSentence = function($string) {
 // Post question
 $scope.doAsk = function () {
 	// TODO: create input.head
-	var newTodo = $scope.input.head.trim();
+	var head = $scope.input.head.trim();
+	
+	//var desc = $scope.input.desc.trim();
+	var desc = "TBD";
 
 	// TODO: adapt for head and desc
 	// No input, so just do nothing
-	if (!newTodo.length) {
-		return;
-	}
+	//if (!head.length && !desc.length) {
+	//	return;
+	//}
 
-	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-	var head = firstAndLast[0];
-	var desc = firstAndLast[1];
+	//var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
+	//var head = firstAndLast[0];
+	//var desc = firstAndLast[1];
 	
 
 	$scope.todos.$add({
@@ -188,8 +191,6 @@ $scope.doReply = function (todo) {
 		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
 		completed: false,
 		timestamp: new Date().getTime(),
-		like: 0,
-		dislike: 0,	
 		order: 0,
 		parentID: todo.$id,
 	});
@@ -210,7 +211,7 @@ $scope.doLike = function (todo) {
 	$scope.editedTodo = todo;
 	todo.like = todo.like + 1;
 	// Hack to order using this order.
-	todo.order = todo.order -1;
+	todo.order = todo.order - 1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
@@ -221,11 +222,31 @@ $scope.doDislike = function (todo) {
 	$scope.editedTodo = todo;
 	todo.dislike = todo.dislike + 1;
 	// Hack to order using this order.
-	todo.order = todo.order +1;
+	todo.order = todo.order + 1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
 	$scope.$storage[todo.$id] = "echoed";
+};
+
+$scope.doLikeReply = function (reply) {
+	$scope.editedReply = reply;
+	// Hack to order using this order.
+	reply.order = reply.order - 1;
+	$scope.todosReplies.$save(reply);
+
+	// Disable the button
+	$scope.$storage[reply.$id] = "echoed";
+};
+
+$scope.doDislikeReply = function (reply) {
+	$scope.editedReply = reply;
+	// Hack to order using this order.
+	reply.order = reply.order + 1;
+	$scope.todosReplies.$save(reply);
+
+	// Disable the button
+	$scope.$storage[reply.$id] = "echoed";
 };
 
 $scope.doneEditing = function (todo) {

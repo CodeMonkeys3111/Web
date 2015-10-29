@@ -73,9 +73,7 @@
 	<form id="todo-form" ng-submit="addTodo()">
 -->
 <!-- post a question -->
-<textarea type="text" id="new-todo" class="form-control"
-placeholder="Search or Post Question"
-ng-model="input.head" autofocus></textarea>
+<textarea type="text" id="new-todo-desc" class="form-control" placeholder="Enter Question Text" ng-model="input.head" autofocus></textarea>
 <span class="input-group-btn">
 	<button class="btn btn-default" type="button" ng-click="doAsk()">Ask</button>
 </span>
@@ -88,7 +86,8 @@ ng-model="input.head" autofocus></textarea>
 		<!-- display questions -->
 		<h4 class="list-group-item-heading">
 			<span class="label label-danger" ng-show="todo.new">New</span>
-			<span class="badge">{{todo.like - todo.dislike}}</span>
+			<span class="badge">{{todo.like}}</span>
+			<span class="badge">{{-todo.dislike}}</span>
 			<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 		</h4>
 		<h5 class="list-group-item-text">{{todo.desc}}</span> </h5>
@@ -108,13 +107,22 @@ ng-model="input.head" autofocus></textarea>
 			<span class="list-group-item" ng-repeat="reply in todosReplies | filter:{'parentID':todo.$id} : true " style="margin-left:50px" >
 				<!-- display replies -->
 				<h5 class="list-group-item-heading">
-					<span class="badge">{{reply.like - reply.dislike}}</span>
+					<span class="badge">{{-reply.order}}</span>
 					<span ng-class="{completed: todo.completed}">{{reply.desc}}</span>
 				</h5>
 				<h5 class="list-group-item-text"></h5>
 		    	<small style="margin-top:5px; color:#848484">
 					<em>created: {{ reply.dateString }}</em>
 				</small>
+				
+				<div>
+					<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
+					<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Disike</button>
+					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(reply)">Toggle Completed</button>
+					&nbsp;
+					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+				</div>
+				
 			</span>
 		  
 			<!-- post a reply -->
