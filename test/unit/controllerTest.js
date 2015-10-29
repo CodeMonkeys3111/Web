@@ -61,6 +61,27 @@ describe('TodoCtrl', function() {
         }
       });
 
+      it('XssProtection',function(){
+    var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+
+        var testInputs2 = [
+         {str:"<html>", exp: "&lt;html&gt;"},
+         // {str:">", exp: "&gt;"},
+          {str:'\"', exp: "&quot;"},
+          //{str:"#", exp: "<strong>#"},
+          {str:"#CodeMonkeys ", exp: "<strong>#CodeMonkeys</strong> "}, //eq <strong>#</strong>
+          {str:"#\n", exp: "<strong>#</strong>\n"}, //eq <strong>#</strong>
+          {str:'.', exp: "."}
+        ];
+
+        for (var j in testInputs2) {
+          var results2= scope.XssProtection(testInputs2[j].str);
+          expect(results2).toEqual(testInputs2[j].exp);
+        }
+      });
+
       it('RoomId', function() {
         location.path('/new/path');
 
