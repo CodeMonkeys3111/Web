@@ -136,7 +136,7 @@ $scope.doAsk = function () {
 	var head = $scope.input.head.trim();
 	
 	//var desc = $scope.input.desc.trim();
-	var desc = "TBD";
+	var desc = $scope.input.desc.trim();
 
 	// TODO: adapt for head and desc
 	// No input, so just do nothing
