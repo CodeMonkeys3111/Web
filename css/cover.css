@@ -48,28 +48,12 @@ body {
   display: table-cell;
   vertical-align: top;
 }
-
-.masthead-brand{
-  font-family: 'Merriweather Sans', sans-serif;
-  font-style: italic;
-}
-
-.alert{
-  font-family: 'Montserrat', sans-serif;
-  font-style: italic;
-}
 .cover-container {
   margin-right: auto;
   margin-left: auto;
 }
 
-.cover-heading{
-  font-family: 'Montserrat', sans-serif;
-}
-.question-desc{
-  font-family: 'Montserrat', sans-serif;
-}
-  /* Padding for spacing */
+/* Padding for spacing */
 .inner {
   padding: 30px;
 }
