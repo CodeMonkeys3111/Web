@@ -135,18 +135,13 @@ $scope.doAsk = function () {
 	// TODO: create input.head
 	var head = $scope.input.head.trim();
 	
-	//var desc = $scope.input.desc.trim();
-	var desc = $scope.input.desc.trim();
+	var desc = "";
+	var descInput = $scope.input.desc.trim()
 
-	// TODO: adapt for head and desc
-	// No input, so just do nothing
-	//if (!head.length && !desc.length) {
-	//	return;
-	//}
-
-	//var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-	//var head = firstAndLast[0];
-	//var desc = firstAndLast[1];
+	// Only change desc if there is one
+	if (descInput.length) {
+		desc = descInput;
+	}
 	
 
 	$scope.todos.$add({

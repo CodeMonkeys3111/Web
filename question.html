@@ -68,27 +68,24 @@
 
 
 
-<div class="input-group">
-	<!--
-	<form id="todo-form" ng-submit="addTodo()">
--->
+
 <!-- post a question -->
 
-<!--
-<div class="form-group">
+
+
 <form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
 
-<input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Your Question Title" autofocus="" required="" maxlength="128" title="Please enter question title!"></input>
+<input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required"></input>
 
-<textarea type="text" id="new-todo" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength" placeholder="Search or Question Content" ng-model="input.desc" required="" maxlength="1024" ng-minlength="3" title="Please enter at least 3 characters!"></textarea>
+<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea> 
 <span class="form-group-btn">
 	<button class="btn btn-default" type="submit">Ask</button>
-	<button class="btn btn-default" id="emoji" ng-disabled="!mobile">Add Emoji</button>
 </span>
 </form>
-</div>
--->
 
+
+<!--
+<div class="input-group" >
 	
 <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus></input>
 
@@ -96,10 +93,9 @@
 <span class="input-group-btn">
 	<button class="btn btn-default" type="button" ng-click="doAsk()">Ask</button>
 </span>
-		
-
 
 </div> <!-- /input-group -->
+	
 
 
 <div class="list-group" id="todo-list">
