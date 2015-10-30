@@ -32,7 +32,7 @@ if (!roomId || roomId.length === 0) {
 	roomId = "all";
 }
 
-// TODO: Please change this URL for your app
+// Kaichen's firebase account
 var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
 
 
@@ -51,7 +51,6 @@ var queryReplies = echoRefReplies.orderByChild("order");
 $scope.todos = $firebaseArray(query);
 $scope.todosReplies = $firebaseArray(queryReplies);
 
-//$scope.input.wholeMsg = '';
 $scope.editedTodo = null;
 
 
@@ -69,12 +68,25 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
+		
+		// TODO: create tags for head and desc
+		// see http://www.w3schools.com/jsref/jsref_concat_array.asp
+		//var tagsDesc = todo.desc.match(/#\w+/g);
+		//var tagsHead = todo.head.match(/#\w+/g);
+		//todo.tags = tagsHead.concat(tagsDesc); 
+		
+		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word charcters);
+		
+		// changes before here will be stored in DB
+		// changes after will not
+		$scope.todos.$save(todo);
+		
+		// 'new' label for questions
+		// TODO: $watchCollection is not called straight after posting a question, only after refreshing
+		// thus, the new label is only updated after the refresh
+		todo.new = (todo.timestamp > new Date().getTime() - 180000);
+		
 
-		// set time
-		todo.dateString = new Date(todo.timestamp).toString();
-		todo.tags = todo.wholeMsg.match(/#\w+/g);
-
-		todo.trustedDesc = $sce.trustAsHtml($scope.XssProtection(todo.linkedDesc));
 		
 	});
 
@@ -87,91 +99,50 @@ $scope.$watchCollection('todos', function () {
 
 // pre-processing for collection - Replies
 $scope.$watchCollection('todosReplies', function () {
-	var total = 0;
-	var remaining = 0;
+
 	$scope.todosReplies.forEach(function (reply) {
-		// Skip invalid entries so they don't break the entire app.
-		//if (!reply || !reply.head ) {
-		//	return;
-		//}
 
-		total++;
-		if (reply.completed === false) {
-			remaining++;
-		}
-
-		// set time
-		reply.dateString = new Date(reply.timestamp).toString();
-		reply.tags = reply.wholeMsg.match(/#\w+/g);
-
-		reply.trustedDesc = $sce.trustAsHtml($scope.XssProtection(reply.linkedDesc));
-		
 	});
 
-	//$scope.totalCount = total;
-	//$scope.remainingCount = remaining;
-	//$scope.completedCount = total - remaining;
-	//$scope.allChecked = remaining === 0;
-	//$scope.absurl = $location.absUrl();
 }, true);
 
 
-// Get the first sentence and rest
-$scope.getFirstAndRestSentence = function($string) {
-	var head = $string;
-	var desc = "";
-
-	var separators = [". ", "? ", "! ", '\n'];
-
-	var firstIndex = -1;
-	for (var i in separators) {
-		var index = $string.indexOf(separators[i]);
-		if (index == -1) continue;
-		if (firstIndex == -1) {firstIndex = index; continue;}
-		if (firstIndex > index) {firstIndex = index;}
-	}
-
-	if (firstIndex !=-1) {
-		head = $string.slice(0, firstIndex+1);
-		desc = $string.slice(firstIndex+1);
-	}
-	return [head, desc];
-};
 
 // Post question
-$scope.addTodo = function () {
-	var newTodo = $scope.input.wholeMsg.trim();
+$scope.doAsk = function () {
+	
+	var head = $scope.input.head.trim();
+	
+	var desc = "";
+	var descInput = $scope.input.desc.trim()
 
-	// No input, so just do nothing
-	if (!newTodo.length) {
-		return;
+	// Only change desc if there is one
+	// TODO: issue - the first question always needs a desc.
+	if (descInput.length) {
+		desc = descInput;
 	}
-
-	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-	var head = firstAndLast[0];
-	var desc = $scope.XssProtection(firstAndLast[1]);
-
+	
+	// add to DB array
 	$scope.todos.$add({
-		wholeMsg: newTodo,
 		wholeMsgReply: '',
 		head: head,
-		headLastChar: head.slice(-1),
 		desc: desc,
-		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
 		completed: false,
 		timestamp: new Date().getTime(),
 		tags: "...",
-		echo: 0,
+		like: 0,
+		dislike: 0,
 		order: 0,
 		replies: 0
 	});
 	// remove the posted question in the input
-	$scope.input.wholeMsg = '';
+	$scope.input.head = '';
+	$scope.input.desc = '';
 };
 
 
 // Reply to Question
-$scope.replyTodo = function (todo) {
+$scope.doReply = function (todo) {
 	
 	var newTodo = todo.wholeMsgReply.trim();
 	
@@ -180,29 +151,22 @@ $scope.replyTodo = function (todo) {
 		return;
 	}
 	
+	// update replies counter of the corresponding question
 	$scope.editedTodo = todo;
 	todo.replies = todo.replies + 1;
 	$scope.todos.$save(todo);
 	
-	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-	var head = firstAndLast[0];
-	var desc = $scope.XssProtection(firstAndLast[1]);
+	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
+	var desc = $scope.XssProtection(newTodo);
 	
+	// add to DB array
 	$scope.todosReplies.$add({
-		wholeMsg: newTodo,
-		wholeMsgReply: '',
-		head: head,
-		headLastChar: head.slice(-1),
 		desc: desc,
-		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
-		completed: false,
 		timestamp: new Date().getTime(),
-		tags: "...",
-		echo: 0,
 		order: 0,
 		parentID: todo.$id,
-		replies: 0
 	});
+	
 	// remove the posted question in the input
 	todo.wholeMsgReply = '';
 	$scope.todos.$save(todo);
@@ -216,32 +180,52 @@ $scope.editTodo = function (todo) {
 	$scope.originalTodo = angular.extend({}, $scope.editedTodo);
 };
 
-$scope.upEcho = function (todo) {
+$scope.doLike = function (todo) {
 	$scope.editedTodo = todo;
-	todo.echo = todo.echo + 1;
+	todo.like = todo.like + 1;
 	// Hack to order using this order.
-	todo.order = todo.order -1;
+	todo.order = todo.order - 1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
 	$scope.$storage[todo.$id] = "echoed";
 };
 
-$scope.downEcho = function (todo) {
+$scope.doDislike = function (todo) {
 	$scope.editedTodo = todo;
-	todo.echo = todo.echo - 1;
+	todo.dislike = todo.dislike + 1;
 	// Hack to order using this order.
-	todo.order = todo.order +1;
+	todo.order = todo.order + 1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
 	$scope.$storage[todo.$id] = "echoed";
+};
+
+$scope.doLikeReply = function (reply) {
+	$scope.editedReply = reply;
+	// Hack to order using this order.
+	reply.order = reply.order - 1;
+	$scope.todosReplies.$save(reply);
+
+	// Disable the button
+	$scope.$storage[reply.$id] = "echoed";
+};
+
+$scope.doDislikeReply = function (reply) {
+	$scope.editedReply = reply;
+	// Hack to order using this order.
+	reply.order = reply.order + 1;
+	$scope.todosReplies.$save(reply);
+
+	// Disable the button
+	$scope.$storage[reply.$id] = "echoed";
 };
 
 $scope.doneEditing = function (todo) {
 	$scope.editedTodo = null;
-	var wholeMsg = todo.wholeMsg.trim();
-	if (wholeMsg) {
+	var head = todo.head.trim();
+	if (head) {
 		$scope.todos.$save(todo);
 	} else {
 		$scope.removeTodo(todo);
@@ -249,7 +233,7 @@ $scope.doneEditing = function (todo) {
 };
 
 $scope.revertEditing = function (todo) {
-	todo.wholeMsg = $scope.originalTodo.wholeMsg;
+	todo.head = $scope.originalTodo.head;
 	$scope.doneEditing(todo);
 };
 
