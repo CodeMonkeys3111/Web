@@ -70,9 +70,6 @@
 
 
 <!-- post a question -->
-
-
-
 <form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
 
 <input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required"></input>
@@ -109,7 +106,7 @@
 			<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 		</h4>
 		<h5 class="list-group-item-text">{{todo.desc}}</span> </h5>
-		<small style="margin-top:5px; color:#848484"><em> created: {{todo.dateString}} <span ng-show="todo.tags">tags: {{todo.tags}}</span> replies: {{todo.replies}} </em></small>
+		<small style="margin-top:5px; color:#848484"><em> created: {{todo.timestamp | date:'medium' }} <span ng-show="todo.tags">tags: {{todo.tags}}</span> replies: {{todo.replies}} </em></small>
 
 		<div>
 			<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like</button>
@@ -130,13 +127,12 @@
 				</h5>
 				<h5 class="list-group-item-text"></h5>
 		    	<small style="margin-top:5px; color:#848484">
-					<em>created: {{ reply.dateString }}</em>
+					<em>created: {{ reply.timestamp | date:'medium' }}</em>
 				</small>
 				
 				<div>
 					<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
 					<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Disike</button>
-					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(reply)">Toggle Completed</button>
 					&nbsp;
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
 				</div>

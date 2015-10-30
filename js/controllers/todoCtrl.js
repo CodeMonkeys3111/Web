@@ -68,12 +68,25 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
-
-		// set time
-		todo.dateString = new Date(todo.timestamp).toString();
 		
-		//TODO: create tags for head and desc
-		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word charcters
+		// TODO: create tags for head and desc
+		// see http://www.w3schools.com/jsref/jsref_concat_array.asp
+		//var tagsDesc = todo.desc.match(/#\w+/g);
+		//var tagsHead = todo.head.match(/#\w+/g);
+		//todo.tags = tagsHead.concat(tagsDesc); 
+		
+		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word charcters);
+		
+		// changes before here will be stored in DB
+		// changes after will not
+		$scope.todos.$save(todo);
+		
+		// 'new' label for questions
+		// TODO: $watchCollection is not called straight after posting a question, only after refreshing
+		// thus, the new label is only updated after the refresh
+		todo.new = (todo.timestamp > new Date().getTime() - 180000);
+		
+
 		
 	});
 
@@ -86,64 +99,30 @@ $scope.$watchCollection('todos', function () {
 
 // pre-processing for collection - Replies
 $scope.$watchCollection('todosReplies', function () {
-	var total = 0;
-	var remaining = 0;
+
 	$scope.todosReplies.forEach(function (reply) {
 
-		total++;
-		if (reply.completed === false) {
-			remaining++;
-		}
-
-		// set time
-		reply.dateString = new Date(reply.timestamp).toString();
-		
 	});
 
-	//$scope.totalCount = total;
-	//$scope.remainingCount = remaining;
-	//$scope.completedCount = total - remaining;
-	//$scope.allChecked = remaining === 0;
-	//$scope.absurl = $location.absUrl();
 }, true);
 
 
-// Get the first sentence and rest
-$scope.getFirstAndRestSentence = function($string) {
-	var head = $string;
-	var desc = "";
-
-	var separators = [". ", "? ", "! ", '\n'];
-
-	var firstIndex = -1;
-	for (var i in separators) {
-		var index = $string.indexOf(separators[i]);
-		if (index == -1) continue;
-		if (firstIndex == -1) {firstIndex = index; continue;}
-		if (firstIndex > index) {firstIndex = index;}
-	}
-
-	if (firstIndex !=-1) {
-		head = $string.slice(0, firstIndex+1);
-		desc = $string.slice(firstIndex+1);
-	}
-	return [head, desc];
-};
 
 // Post question
 $scope.doAsk = function () {
-	// TODO: create input.head
+	
 	var head = $scope.input.head.trim();
 	
 	var desc = "";
 	var descInput = $scope.input.desc.trim()
 
 	// Only change desc if there is one
+	// TODO: issue - the first question always needs a desc.
 	if (descInput.length) {
 		desc = descInput;
 	}
 	
-
+	// add to DB array
 	$scope.todos.$add({
 		wholeMsgReply: '',
 		head: head,
@@ -172,23 +151,22 @@ $scope.doReply = function (todo) {
 		return;
 	}
 	
+	// update replies counter of the corresponding question
 	$scope.editedTodo = todo;
 	todo.replies = todo.replies + 1;
 	$scope.todos.$save(todo);
 	
-	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-
 	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
 	var desc = $scope.XssProtection(newTodo);
 	
+	// add to DB array
 	$scope.todosReplies.$add({
 		desc: desc,
-		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
-		completed: false,
 		timestamp: new Date().getTime(),
 		order: 0,
 		parentID: todo.$id,
 	});
+	
 	// remove the posted question in the input
 	todo.wholeMsgReply = '';
 	$scope.todos.$save(todo);
