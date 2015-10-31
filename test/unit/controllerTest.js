@@ -62,17 +62,15 @@ describe('TodoCtrl', function() {
       });
 
       it('XssProtection',function(){
-    var ctrl = controller('TodoCtrl',{
+        var ctrl = controller('TodoCtrl',{
           $scope: scope
         });
 
         var testInputs2 = [
-         {str:"<html>", exp: "&lt;html&gt;"},
-         // {str:">", exp: "&gt;"},
+          {str:"<html>", exp: "&lt;html&gt;"},
           {str:'\"', exp: "&quot;"},
-          //{str:"#", exp: "<strong>#"},
-          {str:"#CodeMonkeys ", exp: "<strong>#CodeMonkeys</strong> "}, //eq <strong>#</strong>
-          {str:"#\n", exp: "<strong>#</strong>\n"}, //eq <strong>#</strong>
+          {str:"#CodeMonkeys ", exp: "<strong>#CodeMonkeys</strong> "}, 
+          {str:"#\n", exp: "<strong>#</strong>\n"},
           {str:'.', exp: "."}
         ];
 
