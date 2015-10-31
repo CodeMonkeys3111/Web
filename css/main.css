@@ -54,7 +54,7 @@ button{
 .icon + span{vertical-align: middle;}
 
 .icon.facebook{
-  background: url(http://www.australian-macadamias.org/trade/images/News%20images/facebook_logo_png_transparent_background.png) no-repeat 0 0;
+  background: url("2000px-Facebook_icon_2013.svg.png") no-repeat 0 0;
   height: 29px;
   width: 38px;
 }
