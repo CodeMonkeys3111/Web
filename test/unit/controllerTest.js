@@ -118,5 +118,114 @@ describe('TodoCtrl', function() {
         scope.increaseMax();
         expect(scope.maxQuestion).toEqual(10);
       });
+
+      it('FBLogout Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.isAdmin = true;
+        scope.FBLogout();
+        expect(scope.isAdmin).toEqual(false);
+      });
+
+      it('addTodo Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.input = { wholeMsg : ""};
+        scope.addTodo();
+        expect(scope.input.wholeMsg).toEqual("");
+        
+        scope.todos = {
+          wholeMsg : ""
+        };
+        scope.input = { wholeMsg : "Hey, how are you doing my friend?"};
+        scope.todos.$add = function(){
+          scope.todos.wholeMsg = scope.input.wholeMsg
+        };
+        scope.addTodo();
+        expect(scope.todos.wholeMsg).toEqual("Hey, how are you doing my friend?");
+      });
+
+      it('editTodo Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = "Hey buddy!";
+        scope.editedTodo = "";
+        scope.originalTodo = {};
+        scope.editTodo(todo);
+        expect(scope.editedTodo).toEqual(todo);
+        expect(scope.originalTodo).toEqual({});
+      });
+
+      it('addEcho Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          echo: "echoooo",
+          order: 1
+        }
+        scope.editedTodo = "";
+        scope.addEcho(todo);
+        expect(scope.editedTodo).toEqual(todo);
+      });
+
+      it('doneEditing Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          wholeMsg: "Hey"
+        }
+        scope.editedTodo = "Hi bro";
+        scope.doneEditing(todo);
+        expect(scope.editedTodo).toEqual(null);
+        var todo = {
+          wholeMsg: "",
+          removed: false
+        }
+        scope.removeTodo = function(todo){
+          todo.remove = true;
+        }
+        scope.doneEditing(todo);
+        expect(scope.editedTodo).toEqual(null);
+      });
+
+      it('revertEditing Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          wholeMsg: "Hey!"
+        }
+        scope.originalTodo = {
+          wholeMsg : "Hey again!"
+        }
+        scope.revertEditing(todo);
+        expect(todo.wholeMsg).toEqual(scope.originalTodo.wholeMsg);
+      });
+
+
+      it('clearCompletedTodos Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.counter = 0;
+        scope.todos = [{completed: true,
+        },
+        {completed: true,
+        },
+        {completed: false, 
+        },
+        {completed: false,
+        }]
+        scope.todos.$remove = function(todo){
+          scope.counter+=1} 
+        scope.clearCompletedTodos();
+        expect(scope.counter).toEqual(2);
+      });
+
     });
   });
