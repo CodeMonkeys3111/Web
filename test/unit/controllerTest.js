@@ -106,5 +106,17 @@ describe('TodoCtrl', function() {
         expect(window.scrollX).toBe(0);
         expect(window.scrollY).toBe(0);
       });
+
+      it('increaseMax Testing', function(){
+          var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
+        scope.maxQuestion = 0;
+        scope.totalCount = 10;
+        scope.increaseMax();
+        expect(scope.maxQuestion).toEqual(10);
+        scope.increaseMax();
+        expect(scope.maxQuestion).toEqual(10);
+      });
     });
   });
