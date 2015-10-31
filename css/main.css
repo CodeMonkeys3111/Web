@@ -1,15 +1,60 @@
+body {
+	min-height: 2000px;
+	padding-top: 70px;
+	background-color: darkorange;
+}
+
+
+.navbar-text{
+	padding-left: 60px;
+	font-family: 'Bubblegum Sans', cursive;
+	text-align: center;
+}
+
+.navbar .navbar-nav {
+	display: inline-block;
+	float: none;
+	vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+	text-align: center;
+}
+
+small{
+	font-family: 'Merriweather Sans', sans-serif;
+	font-style: italic;
+}
+a{
+	font-family: 'Merriweather Sans', sans-serif;
+}
+button{
+	font-family: 'Bubblegum Sans', cursive;
+	font-size: 30px;
+}
+
+.list-group-item-heading, .list-group-item-text{
+	font-family: 'Merriweather Sans', sans-serif;
+	font-style: italic;
+}
 .completed {
 	color: #d9d9d9;
 	text-decoration: line-through;
 }
+.navbar-brand{
+	font-family: 'Sigmar One', cursive;
+}
 
+.form-control{
+	font-family: 'Bubblegum Sans', cursive;
+}
 
 .icon{display: inline-block;}
 .icon,
 .icon + span{vertical-align: middle;}
 
 .icon.facebook{
-  background: url(../img/icon-facebook.png) no-repeat 0 0;
+  background: url(http://www.australian-macadamias.org/trade/images/News%20images/facebook_logo_png_transparent_background.png) no-repeat 0 0;
   height: 29px;
   width: 38px;
 }
