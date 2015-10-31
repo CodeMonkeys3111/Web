@@ -41,25 +41,6 @@ describe('TodoCtrl', function() {
     }));
 
     describe('TodoCtrl Testing', function() {
-      it('setFirstAndRestSentence', function() {
-        var ctrl = controller('TodoCtrl', {
-          $scope: scope
-        });
-
-        var testInputs = [
-          {str:"Hello? This is Sung", exp: "Hello?"},
-          {str:"Hello.co? This is Sung", exp: "Hello.co?"},
-          {str:"Hello.co This is Sung", exp: "Hello.co This is Sung"},
-          {str:"Hello.co \nThis is Sung", exp: "Hello.co \n"},
-
-          {str:"Hello?? This is Sung", exp: "Hello??"},
-        ];
-
-        for (var i in testInputs) {
-          var results = scope.getFirstAndRestSentence(testInputs[i].str);
-          expect(results[0]).toEqual(testInputs[i].exp);
-        }
-      });
 
       it('XssProtection',function(){
         var ctrl = controller('TodoCtrl',{
@@ -128,23 +109,51 @@ describe('TodoCtrl', function() {
         expect(scope.isAdmin).toEqual(false);
       });
 
-      it('addTodo Testing', function(){
+      it('doAsk Testing', function(){
         var ctrl = controller('TodoCtrl', {
         $scope: scope
         });
-        scope.input = { wholeMsg : ""};
-        scope.addTodo();
-        expect(scope.input.wholeMsg).toEqual("");
-        
-        scope.todos = {
-          wholeMsg : ""
+        scope.input = { 
+          head : "testing head",
+          desc: "testing desc"
         };
-        scope.input = { wholeMsg : "Hey, how are you doing my friend?"};
         scope.todos.$add = function(){
-          scope.todos.wholeMsg = scope.input.wholeMsg
+          scope.todos.head = scope.input.head
+          scope.todos.desc = scope.input.desc
         };
-        scope.addTodo();
-        expect(scope.todos.wholeMsg).toEqual("Hey, how are you doing my friend?");
+        scope.doAsk();
+        expect(scope.todos.head).toEqual("testing head");
+        expect(scope.todos.desc).toEqual("testing desc");
+        expect(scope.input.head).toEqual("");
+        expect(scope.input.desc).toEqual("");
+      });
+
+      it('doReply Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+
+        var todo = {
+          wholeMsgReply: "",
+          replies: 0
+        }
+        scope.doReply(todo);
+        expect(todo.replies).toEqual(0);
+
+        /*
+        var todo = {
+          wholeMsgReply: "This is a reply",
+          replies: 0
+        }
+        scope.editedTodo = "Greetings";
+        scope.todosReplies.add = function(){
+          scope.todosReplies.desc = todo.wholeMsgReply
+        };
+        scope.doReply(todo);
+        expect(scope.todos.desc).toEqual("This is a reply");
+        expect(todo.wholeMsgReply).toEqual("");
+        
+        */
       });
 
       it('editTodo Testing', function(){
@@ -159,31 +168,18 @@ describe('TodoCtrl', function() {
         expect(scope.originalTodo).toEqual({});
       });
 
-      it('addEcho Testing', function(){
-        var ctrl = controller('TodoCtrl', {
-        $scope: scope
-        });
-        var todo = {
-          echo: "echoooo",
-          order: 1
-        }
-        scope.editedTodo = "";
-        scope.addEcho(todo);
-        expect(scope.editedTodo).toEqual(todo);
-      });
-
       it('doneEditing Testing', function(){
         var ctrl = controller('TodoCtrl', {
         $scope: scope
         });
         var todo = {
-          wholeMsg: "Hey"
+          head: "Hey"
         }
         scope.editedTodo = "Hi bro";
         scope.doneEditing(todo);
         expect(scope.editedTodo).toEqual(null);
         var todo = {
-          wholeMsg: "",
+          head: "",
           removed: false
         }
         scope.removeTodo = function(todo){
@@ -198,13 +194,13 @@ describe('TodoCtrl', function() {
         $scope: scope
         });
         var todo = {
-          wholeMsg: "Hey!"
+          head: "Hey!"
         }
         scope.originalTodo = {
-          wholeMsg : "Hey again!"
+          head : "Hey again!"
         }
         scope.revertEditing(todo);
-        expect(todo.wholeMsg).toEqual(scope.originalTodo.wholeMsg);
+        expect(todo.head).toEqual(scope.originalTodo.head);
       });
 
 
@@ -226,6 +222,32 @@ describe('TodoCtrl', function() {
         scope.clearCompletedTodos();
         expect(scope.counter).toEqual(2);
       });
+
+      it('doLike Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          like: 0,
+          order: 1
+        }
+        scope.doLike(todo);
+        expect(todo.like).toEqual(1);
+        expect(todo.order).toEqual(0);
+      })
+
+      it('doDislike Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          dislike: 0,
+          order: 0
+        }
+        scope.doDislike(todo);
+        expect(todo.dislike).toEqual(1);
+        expect(todo.order).toEqual(1);
+      })
 
     });
   });
