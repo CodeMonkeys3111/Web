@@ -77,3 +77,6 @@ button{
 }
 #toTop .fa {margin-right: 5px;}
 
+#todo-list{
+	padding-top: 1.5em;
+}
