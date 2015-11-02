@@ -115,15 +115,15 @@
 				<h4 class="media-heading">
 					<span class="label label-danger" ng-show="todo.new">New</span>
 					<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
-					<span class="label label-primary glyphicon glyphicon-comment">Replies<span class="badge alert-info">{{todo.replies}}</span> </span>
 				</h4>
 				<div style="font-family: 'Merriweather Sans', sans-serif; font-style: italic">{{todo.desc}}<br></div>
 				<small style="margin-top:5px; color:#848484">
-					<em>created: {{ todo.timestamp | date:'medium' }}<span ng-show="todo.tags">tags: {{todo.tags}}</span></em>
+					<em>created: {{ todo.timestamp | date:'medium' }}</em>
 				</small>
 				<div>
 					<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like<span class="badge">{{todo.like}}</span></button>
 					<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislike(todo)" ng-disabled="$storage[todo.$id]">Dislike<span class="badge">{{todo.dislike}}</span></button>
+					<span class="label label-primary glyphicon glyphicon-comment">Replies<span class="badge alert-info">{{todo.replies}}</span></span>
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 					&nbsp;
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
