@@ -33,7 +33,7 @@ button{
 	font-size: 30px;
 }
 
-.list-group-item-heading, .list-group-item-text{
+.media-heading, .list-group-item-text{
 	font-family: 'Merriweather Sans', sans-serif;
 	font-style: italic;
 }
