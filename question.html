@@ -105,7 +105,7 @@
 		<span class="list-group-item" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" style="background-color: #F5F5F5">
 			<!-- display questions -->
 			<h4 class="list-group-item-heading">
-				<span class="label label-danger" ng-show="todo.new">New</span>
+				<span class="label label-danger" ng-show="isNew(todo)">New</span>
 				<span class="badge">{{todo.like}}</span>
 				<span class="badge">{{-todo.dislike}}</span>
 				<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
