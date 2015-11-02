@@ -80,3 +80,11 @@ button{
 #todo-list{
 	padding-top: 1.5em;
 }
+
+#questionTitleText{
+	margin-bottom: 0.2em;
+}
+
+#new-todo{
+	margin-bottom: 0.2em;
+}
