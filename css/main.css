@@ -77,3 +77,14 @@ button{
 }
 #toTop .fa {margin-right: 5px;}
 
+#todo-list{
+	padding-top: 1.5em;
+}
+
+#questionTitleText{
+	margin-bottom: 0.2em;
+}
+
+#new-todo{
+	margin-bottom: 0.2em;
+}
