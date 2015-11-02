@@ -68,11 +68,11 @@
 	<div class="container">
 		<div class="jumbotron">
 			<h1 style="font-family: 'Bubblegum Sans', cursive">Quesions for {{roomId}}?</h1>
-			<p style="font-family: 'Bubblegum Sans', cursive">This is the question room of {{roomId}}, you can post your questions anonymously, or try to save someone's day by reply them if you know the answer! :D </p>
-			<p style="font-family: 'Bubblegum Sans', cursive">To share this room to your classmates or your friends, feel free to copy and paste the url below, or just click the button.</p>
+			<p style="font-family: 'Bubblegum Sans', cursive">This is the question room of {{roomId}}, you can post your questions anonymously, or try to save someone's day by replying to them if you know the answer! :D </p>
+			<p style="font-family: 'Bubblegum Sans', cursive">To share this room with your classmates or friends, copy the url below, or click the button.</p>
 			<small>Share room url: {{absurl}}</small> &nbsp;
 			<p>
-				<a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button" style="font-family: 'Bubblegum Sans', cursive">Share room to others! &raquo;</a>
+				<a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button" style="font-family: 'Bubblegum Sans', cursive">Share room &raquo;</a>
 			</p>
 		</div>
 	</div>
@@ -90,9 +90,9 @@
 	<h1 style="font-family: 'Bubblegum Sans', cursive;"><b>Let's ASK!</b></h1>
 	<form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
 
-	<input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required"></input>
+	<input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter question title" autofocus="" required="" maxlength="128" title="A title is required"></input>
 
-	<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
+	<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter question text or search questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
 	<span class="form-group-btn">
 		<button class="btn btn-default btn-primary" type="submit">Ask!</button>
 	</span>
@@ -111,12 +111,12 @@
 				<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 			</h4>
 			<h5 class="list-group-item-text">{{todo.desc}}</span> </h5>
-			<small style="margin-top:5px; color:#848484"><em> created: {{todo.timestamp | date:'medium' }} <span ng-show="todo.tags">tags: {{todo.tags}}</span> replies: {{todo.replies}} </em></small>
+			<small style="margin-top:5px; color:#848484"><em> {{todo.timestamp | date:'medium' }} <span ng-show="todo.tags">tags: {{todo.tags}}</span> | {{todo.replies}} replies</em></small>
 
 			<!-- display buttons for question -->
 			<div>
 				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like</button>
-				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="doDislike(todo)" ng-disabled="$storage[todo.$id]">Disike</button>
+				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="doDislike(todo)" ng-disabled="$storage[todo.$id]">Dislike</button>
 				<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 				&nbsp;
 				<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
@@ -147,7 +147,7 @@
 
 				<!-- post a reply -->
 				<div class="input-group" style="margin-left:50px">
-					<textarea type="text" id="new-todo-reply" class="form-control" placeholder="Have Answer? Save their day!" ng-model="todo.wholeMsgReply">
+					<textarea type="text" id="new-todo-reply" class="form-control" placeholder="Do you have the answer? Save their day!" ng-model="todo.wholeMsgReply">
 					</textarea>
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" ng-click="doReply(todo)">Reply!</button>
