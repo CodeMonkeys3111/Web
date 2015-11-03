@@ -75,7 +75,7 @@ $scope.$watchCollection('todos', function () {
 		//var tagsHead = todo.head.match(/#\w+/g);
 		//todo.tags = tagsHead.concat(tagsDesc); 
 		
-		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word charcters);
+		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word characters);
 		
 		// changes before here will be stored in DB
 		// changes after will not
