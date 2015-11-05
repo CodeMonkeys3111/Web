@@ -26,6 +26,7 @@ $("#btn_top").hide();
 }
 });
 */
+
 var splits = $location.path().trim().split("/");
 var roomId = angular.lowercase(splits[1]);
 if (!roomId || roomId.length === 0) {
@@ -34,7 +35,6 @@ if (!roomId || roomId.length === 0) {
 
 // Kaichen's firebase account
 var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
-
 
 // create variables for firebase DB
 $scope.roomId = roomId;
