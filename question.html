@@ -112,7 +112,7 @@
 			<div class="media-body">
 				<!-- Question Heading -->
 				<h4 class="media-heading">
-					<span class="label label-danger" ng-show="todo.new">New</span>
+						<span class="label label-danger" ng-show="isNew(todo)">New</span>
 					<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 				</h4>
 				<div style="font-family: 'Merriweather Sans', sans-serif; font-style: italic">{{todo.desc}}<br></div>
