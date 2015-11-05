@@ -27,6 +27,8 @@
 	<link href='https://fonts.googleapis.com/css?family=Sigmar+One|Bubblegum+Sans' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Lobster|Merriweather+Sans:400,700italic' rel='stylesheet' type='text/css'>
 
+
+
 </head>
 <body ng-controller="TodoCtrl">
 
@@ -117,7 +119,8 @@
 				</h4>
 				<div style="font-family: 'Merriweather Sans', sans-serif; font-style: italic">{{todo.desc}}<br></div>
 				<small style="margin-top:5px; color:#848484">
-					<em>created: {{ todo.timestamp | date:'medium' }}</em>
+					<!-- <em>created: {{ todo.timestamp | date:'medium' }}</em> -->
+					<em>Created: <time am-time-ago="todo.timestamp"</time></em>
 				</small>
 				<div>
 					<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like<span class="badge">{{todo.like}}</span></button>
@@ -144,11 +147,11 @@
 							</h4>
 							{{reply.desc}}<br>
 							<small style="margin-top:5px; color:#848484">
-								<em>created: {{ reply.timestamp | date:'medium' }}</em>
+								<em>Created:</em> <em am-time-ago="reply.timestamp"></em>
 							</small>
 							<div>
 								<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
-								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Disike</button>
+								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Dislike</button>
 								&nbsp;
 								<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
 							</div>
@@ -193,5 +196,10 @@ type="button" ng-click="increaseMax()"> Show more</button>
 <script src="js/directives/todoFocus.js"></script>
 <script src="js/directives/todoBlur.js"></script>
 <script src="js/directives/todoEscape.js"></script>
+
+<!-- load momentJS (required for angular-moment) -->
+<script src="js/lib/moment.min.js"></script>
+<!-- load angular-moment -->
+<script src="js/lib/angular-moment.min.js"></script>
 </body>
 </html>
