@@ -120,7 +120,7 @@
 				<div style="font-family: 'Merriweather Sans', sans-serif; font-style: italic">{{todo.desc}}<br></div>
 				<small style="margin-top:5px; color:#848484">
 					<!-- <em>created: {{ todo.timestamp | date:'medium' }}</em> -->
-					<em>Created: <time am-time-ago="todo.timestamp"</time></em>
+					<em>Created: <time title="{{ todo.timestamp | date:'medium'}}" am-time-ago="todo.timestamp"</time></em>
 				</small>
 				<div>
 					<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like<span class="badge">{{todo.like}}</span></button>
@@ -147,7 +147,7 @@
 							</h4>
 							{{reply.desc}}<br>
 							<small style="margin-top:5px; color:#848484">
-								<em>Created:</em> <em am-time-ago="reply.timestamp"></em>
+								<em>Created:</em> <em title="{{ reply.timestamp | date:'medium'}}" am-time-ago="reply.timestamp"></em>
 							</small>
 							<div>
 								<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
