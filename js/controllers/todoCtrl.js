@@ -81,13 +81,6 @@ $scope.$watchCollection('todos', function () {
 		// changes after will not
 		$scope.todos.$save(todo);
 		
-		// 'new' label for questions
-		// TODO: $watchCollection is not called straight after posting a question, only after refreshing
-		// thus, the new label is only updated after the refresh
-		todo.new = (todo.timestamp > new Date().getTime() - 180000);
-		
-
-		
 	});
 
 	$scope.totalCount = total;
@@ -178,6 +171,14 @@ $scope.doReply = function (todo) {
 $scope.editTodo = function (todo) {
 	$scope.editedTodo = todo;
 	$scope.originalTodo = angular.extend({}, $scope.editedTodo);
+};
+
+$scope.isNew = function (todo) {
+	if (todo.timestamp > new Date().getTime() - 180000) { // 3min
+		return true;
+	} else {
+		return false;
+	}
 };
 
 $scope.doLike = function (todo) {
