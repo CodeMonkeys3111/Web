@@ -40,8 +40,10 @@ var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
 $scope.roomId = roomId;
 var url = firebaseURL + roomId + "/questions/";
 var urlReplies = firebaseURL + roomId + "/replies/";
+var privateURL = firebaseURL + "/privateList/";    //Add a DB address to store the private roomID
 var echoRef = new Firebase(url);
 var echoRefReplies = new Firebase(urlReplies);
+var privateRoom = new Firebase(privateURL);        //Store the ID to Firebase
 
 var query = echoRef.orderByChild("order");
 var queryReplies = echoRefReplies.orderByChild("order");
