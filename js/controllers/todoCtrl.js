@@ -26,6 +26,7 @@ $("#btn_top").hide();
 }
 });
 */
+
 var splits = $location.path().trim().split("/");
 var roomId = angular.lowercase(splits[1]);
 if (!roomId || roomId.length === 0) {
@@ -34,7 +35,6 @@ if (!roomId || roomId.length === 0) {
 
 // Kaichen's firebase account
 var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
-
 
 // create variables for firebase DB
 $scope.roomId = roomId;
@@ -75,18 +75,11 @@ $scope.$watchCollection('todos', function () {
 		//var tagsHead = todo.head.match(/#\w+/g);
 		//todo.tags = tagsHead.concat(tagsDesc); 
 		
-		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word charcters);
+		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word characters);
 		
 		// changes before here will be stored in DB
 		// changes after will not
 		$scope.todos.$save(todo);
-		
-		// 'new' label for questions
-		// TODO: $watchCollection is not called straight after posting a question, only after refreshing
-		// thus, the new label is only updated after the refresh
-		todo.new = (todo.timestamp > new Date().getTime() - 180000);
-		
-
 		
 	});
 
@@ -178,6 +171,14 @@ $scope.doReply = function (todo) {
 $scope.editTodo = function (todo) {
 	$scope.editedTodo = todo;
 	$scope.originalTodo = angular.extend({}, $scope.editedTodo);
+};
+
+$scope.isNew = function (todo) {
+	if (todo.timestamp > new Date().getTime() - 180000) { // 3min
+		return true;
+	} else {
+		return false;
+	}
 };
 
 $scope.doLike = function (todo) {
