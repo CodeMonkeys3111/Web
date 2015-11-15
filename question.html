@@ -104,14 +104,13 @@
 			</span>
 
 			<div class="dropdown">
-				<button class="btn btn-default btn-primary dropdown-toggle" type="button" id="sortingDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort: {{predicateText}} <span class="caret"></span>
+				<button class="btn btn-default btn-primary dropdown-toggle" type="button" id="sortingDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort by: {{predicateText}} <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a href="" ng-click="setSorting('-timestamp','Most Recent')">Most Recent</a></li>
-					<li><a href="" ng-click="setSorting('order','Hottest')">Hottest</a></li>
-					<li><a href="" ng-click="setSorting('-like','Most Likes')">Most Likes</a></li>
-					<li><a href="" ng-click="setSorting('-dislike','Most Dislikes')">Most Dislikes</a></li>
- 					<li><a href="" ng-click="setSorting('-replies','Last Replied')">Last Replied</a></li> <!-- TODO: not yet implemented. replies stands for the number of replies, not the timestamp of the last reply. -->
+					<li><a href="" ng-click="setSorting('-timestamp','Date')">Date</a></li>
+					<li><a href="" ng-click="setSorting('order','Rating')">Rating</a></li>
+					<li><a href="" ng-click="setSorting('-like','Likes')">Likes</a></li>
+					<li><a href="" ng-click="setSorting('-dislike','Dislikes')">Dislikes</a></li>
 				</ul>
 			</div>
 		</div>		

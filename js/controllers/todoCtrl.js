@@ -57,7 +57,7 @@ $scope.editedTodo = null;
 // default sorting settings
 if($scope.predicate == undefined) {
 	$scope.predicate = 'timestamp';
-	$scope.predicateText = 'Most Recent';
+	$scope.predicateText = 'Date';
 	$scope.reverse = true;
 }
 
@@ -303,17 +303,9 @@ $scope.toTop =function toTop() {
 };
 
 $scope.setSorting = function(predicate, predicateText){
-	//if(predicate == $scope.predicate){ //both is -predicate
-	//	$scope.predicate = predicate.substr(1);
-	//}
-	//else{
-	//	$scope.predicate = predicate;
-	//}
-	
 	$scope.predicateText = predicateText;
     $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
     $scope.predicate = predicate;
-	  
 };
 
 // Not sure what is this code. Todel
