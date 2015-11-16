@@ -17,15 +17,15 @@
 
 	<title>Question Room: {{roomId}}</title>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
 	<!-- need this for comlted ones. TODO: can I do this in bootstrap -->
 	<link rel="stylesheet" href="css/main.css">
 
 	<!-- Custom fonts from Google Web Font -->
-	<link href='https://fonts.googleapis.com/css?family=Sigmar+One|Bubblegum+Sans' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Lobster|Merriweather+Sans:400,700italic' rel='stylesheet' type='text/css'>
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Sigmar+One|Bubblegum+Sans' type='text/css'>
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Lobster|Merriweather+Sans:400,700italic' type='text/css'>
 
 
 
@@ -81,29 +81,49 @@
 <!-- after login -->
 <img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
 {{$authData.facebook.displayName}}
-<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>
-
-
-
+<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>		
 
 <!-- post a question -->
 <div class="container">
 	<h1 style="font-family: 'Bubblegum Sans', cursive;"><b>Let's ASK!</b></h1>
+	
+	
 	<form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
 
-		<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required"></input>
+		<div class = "col-md-10">
 
-		<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
-	<span class="form-group-btn">
-		<button class="btn btn-default btn-primary" type="submit">Ask!</button>
-	</span>
+				<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required">
+
+				<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
+		
+		</div>
+		<div class = "col-md-2">	
+		
+			<span class="form-group-btn">
+				<button class="btn btn-default btn-primary btn-lg" type="submit">Ask!</button>
+			</span>
+
+			<div class="dropdown">
+				<button class="btn btn-default btn-primary dropdown-toggle" type="button" id="sortingDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort by: {{predicateText}} <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="" ng-click="setSorting('-timestamp','Date')">Date</a></li>
+					<li><a href="" ng-click="setSorting('order','Rating')">Rating</a></li>
+					<li><a href="" ng-click="setSorting('-like','Likes')">Likes</a></li>
+					<li><a href="" ng-click="setSorting('-dislike','Dislikes')">Dislikes</a></li>
+				</ul>
+			</div>
+		</div>		
 	</form>
 </div>
+
+
+
 <div id="questionsContainer" class="container">
 	<!-- Question Bounder -->
 	<div id="questionBoundary" class="list-group">
 		<!-- Iterate Questions -->
-		<div class="media" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+		<div class="media" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | orderBy:predicate:reverse" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 			<!-- Display Avatar -->
 			<div class="media-left">
 				<a href="#">
@@ -177,7 +197,8 @@ class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
 type="button" ng-click="increaseMax()"> Show more</button>
 -->
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
