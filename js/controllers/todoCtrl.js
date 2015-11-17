@@ -79,14 +79,17 @@ $scope.$watchCollection('todos', function () {
 		
 		// TODO: create tags for head and desc
 		// see http://www.w3schools.com/jsref/jsref_concat_array.asp
-		//var tagsDesc = todo.desc.match(/#\w+/g);
-		//var tagsHead = todo.head.match(/#\w+/g);
-		//todo.tags = tagsHead.concat(tagsDesc); 
 		
-		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word characters);
+		var tagsHead = todo.head.match(/#\w+/g);
+		if (tagsHead == null) 	// no match found
+			tagsHead = [];	// intialize to avoid error using concat
 		
-		// changes before here will be stored in DB
-		// changes after will not
+		var tagsDesc = todo.desc.match(/#\w+/g);
+		if (tagsDesc == null) 	// no match found
+			tagsDesc = [];	// intialize to avoid error using concat
+		
+		todo.tags = tagsHead.concat(tagsDesc); 
+		
 		$scope.todos.$save(todo);
 		
 	});
@@ -158,11 +161,11 @@ $scope.doReply = function (todo) {
 	$scope.todos.$save(todo);
 	
 	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
-	var desc = $scope.XssProtection(newTodo);
+	//var desc = $scope.XssProtection(newTodo);
 	
 	// add to DB array
 	$scope.todosReplies.$add({
-		desc: desc,
+		desc: newTodo,
 		timestamp: new Date().getTime(),
 		order: 0,
 		parentID: todo.$id,
@@ -328,6 +331,20 @@ angular.element($window).bind("scroll", function() {
 		$scope.$apply();
 	}
 });
+
+$scope.addTagToSearch = function($tag) {
+	try{
+		if ($scope.input.head.trim())
+			var Msg = $scope.input.head.trim() + " " +$tag;
+		else
+			var Msg = $tag;
+	}
+	catch(e){
+		var Msg = $tag;
+	}
+	$scope.input = {head: Msg};
+}
+
 
 $scope.XssProtection = function($string) {
     //var filteredMsg = "<pre>";

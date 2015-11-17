@@ -94,3 +94,9 @@ button{
 	background-color: #FFFFFF; 
 	padding: 10px;
 }
+
+
+#tagButtonGroup{
+	float:right;
+	margin: 0px 0px 0px 10px;
+}

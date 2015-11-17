@@ -60,12 +60,6 @@
 	</div>
 </nav>
 
-<!--
-<a ng-class="{selected: location.path() == '/newechos'}" class="btn btn-primary" href="#/newechos">New Echos</a>
-<a ng-class="{selected: location.path() == '/tags'}" class="btn btn-success" href="#/tags">Tags</a>
-<a ng-class="{selected: location.path() == '/users'}" class="btn btn-info" href="#/users">Users</a>
-<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
--->
 <div class="container">
 	<div class="jumbotron">
 		<h1 style="font-family: 'Bubblegum Sans', cursive">Questions for {{roomId}}?</h1>
@@ -123,7 +117,7 @@
 	<!-- Question Bounder -->
 	<div id="questionBoundary" class="list-group">
 		<!-- Iterate Questions -->
-		<div class="media" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | orderBy:predicate:reverse" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+		<div class="media" ng-repeat="todo in todos | filter:input.head |filter:input.desc | questionFilter:maxQuestion | orderBy:predicate:reverse" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 			<!-- Display Avatar -->
 			<div class="media-left">
 				<a href="#">
@@ -139,8 +133,8 @@
 				</h4>
 				<div style="font-family: 'Merriweather Sans', sans-serif; font-style: italic">{{todo.desc}}<br></div>
 				<small style="margin-top:5px; color:#848484">
-					<!-- <em>created: {{ todo.timestamp | date:'medium' }}</em> -->
 					<em>Created: <time title="{{ todo.timestamp | date:'medium'}}" am-time-ago="todo.timestamp"</time></em>
+					
 				</small>
 				<div>
 					<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like<span class="badge">{{todo.like}}</span></button>
@@ -149,6 +143,9 @@
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 					&nbsp;
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+					<div class="btn-group" id="tagButtonGroup" >
+						<button class="btn btn-primary btn-xs glyphicon glyphicon-tag" ng-repeat="tag in todo.tags" ng-click="addTagToSearch(tag)">{{tag.substr(1)}}</button>
+					</div>
 				</div>
 
 				<div class="list-group" style="background-color: #F5F5F5;">
