@@ -338,7 +338,7 @@ angular.element($window).bind("scroll", function() {
 $scope.addTagToSearch = function(tag) {
 	try{
 		if ($scope.input.head.trim())
-			var Msg = $scope.input.head.trim() + " " +$tag;
+			var Msg = $scope.input.head.trim() + " " + tag;
 		else
 			var Msg = tag;
 	}
@@ -353,7 +353,6 @@ $scope.addTagToDatabase = function(tag) {
 }
 
 $scope.XssProtection = function($string) {
-    //var filteredMsg = "<pre>";
 	var filteredMsg = '';
     var inHashtag = false;
     for (var i = 0; i < $string.length; ++i) {
@@ -374,7 +373,6 @@ $scope.XssProtection = function($string) {
 	    	filteredMsg+=ch;
 		}
     }
-    //filteredMsg+="</pre>";
     return filteredMsg;
 };
 
