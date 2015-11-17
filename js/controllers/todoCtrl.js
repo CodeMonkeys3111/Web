@@ -39,18 +39,20 @@ var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
 
 // create variables for firebase DB
 $scope.roomId = roomId;
-var url = firebaseURL + roomId + "/questions/";
+var urlQuestions = firebaseURL + roomId + "/questions/";
 var urlReplies = firebaseURL + roomId + "/replies/";
-var echoRef = new Firebase(url);
+var urlTags = firebaseURL + roomId + "/tags/";
+var echoRefQuestions = new Firebase(urlQuestions);
 var echoRefReplies = new Firebase(urlReplies);
+var echoRefTags = new Firebase(urlTags);
 
-var query = echoRef.orderByChild("order");
+var queryQuestions = echoRefQuestions.orderByChild("order");	// TODO: adapt once removing the 'order' attribute
 var queryReplies = echoRefReplies.orderByChild("order");
+var queryTags = echoRefTags.orderByChild("used");
 
-// TODO: Should we limit?
-//.limitToFirst(1000);
-$scope.todos = $firebaseArray(query);
+$scope.todos = $firebaseArray(queryQuestions);
 $scope.todosReplies = $firebaseArray(queryReplies);
+$scope.todosTags = $firebaseArray(queryReplies);
 
 $scope.editedTodo = null;
 
@@ -76,20 +78,7 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
-		
-		// TODO: create tags for head and desc
-		// see http://www.w3schools.com/jsref/jsref_concat_array.asp
-		
-		var tagsHead = todo.head.match(/#\w+/g);
-		if (tagsHead == null) 	// no match found
-			tagsHead = [];	// intialize to avoid error using concat
-		
-		var tagsDesc = todo.desc.match(/#\w+/g);
-		if (tagsDesc == null) 	// no match found
-			tagsDesc = [];	// intialize to avoid error using concat
-		
-		todo.tags = tagsHead.concat(tagsDesc); 
-		
+
 		$scope.todos.$save(todo);
 		
 	});
@@ -126,6 +115,20 @@ $scope.doAsk = function () {
 		desc = descInput;
 	}
 	
+	
+	// extract hashtags from questions
+	var tagsHead = head.match(/#\w+/g);
+	if (tagsHead == null)
+		tagsHead = [];	// intialize to avoid error using concat
+	
+	var tagsDesc = desc.match(/#\w+/g);
+	if (tagsDesc == null)
+		tagsDesc = [];
+	// concatenate hasthags from head and desc
+	var tags = tagsHead.concat(tagsDesc);
+	
+
+	
 	// add to DB array
 	$scope.todos.$add({
 		wholeMsgReply: '',
@@ -133,7 +136,7 @@ $scope.doAsk = function () {
 		desc: desc,
 		completed: false,
 		timestamp: new Date().getTime(),
-		tags: "...",
+		tags: tags,
 		like: 0,
 		dislike: 0,
 		order: 0,
@@ -332,19 +335,22 @@ angular.element($window).bind("scroll", function() {
 	}
 });
 
-$scope.addTagToSearch = function($tag) {
+$scope.addTagToSearch = function(tag) {
 	try{
 		if ($scope.input.head.trim())
 			var Msg = $scope.input.head.trim() + " " +$tag;
 		else
-			var Msg = $tag;
+			var Msg = tag;
 	}
 	catch(e){
-		var Msg = $tag;
+		var Msg = tag;
 	}
 	$scope.input = {head: Msg};
 }
 
+$scope.addTagToDatabase = function(tag) {
+
+}
 
 $scope.XssProtection = function($string) {
     //var filteredMsg = "<pre>";
