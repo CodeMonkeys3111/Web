@@ -52,7 +52,7 @@ var queryTags = echoRefTags.orderByChild("used");
 
 $scope.todos = $firebaseArray(queryQuestions);
 $scope.todosReplies = $firebaseArray(queryReplies);
-$scope.todosTags = $firebaseArray(queryReplies);
+$scope.todosTags = $firebaseArray(queryTags);
 
 $scope.editedTodo = null;
 
@@ -100,6 +100,12 @@ $scope.$watchCollection('todosReplies', function () {
 }, true);
 
 
+// pre-processing for collection - Tags
+$scope.$watchCollection('todosReplies', function () {
+
+}, true);
+
+
 
 // Post question
 $scope.doAsk = function () {
@@ -127,9 +133,23 @@ $scope.doAsk = function () {
 	// concatenate hasthags from head and desc
 	var tags = tagsHead.concat(tagsDesc);
 	
-
+	tags.forEach(function(part, index) {
+		window.alert('Before: tagCurrent=' + tags[index]);
+		tags[index] = part.toLowerCase();
+		window.alert('After: tagCurrent=' + tags[index]);
+	});
 	
-	// add to DB array
+	// all letters of tags are lowercase
+	/*
+	tags.forEach(function (tagCurrent) {
+		window.alert('Before: tagCurrent=' + tagCurrent);
+		tagCurrent = tagCurrent.toLowerCase();
+		tags.$save(tagCurrent);
+		window.alert('After: tagCurrent=' + tagCurrent);
+	});
+	*/
+	
+	// add to question array
 	$scope.todos.$add({
 		wholeMsgReply: '',
 		head: head,
@@ -145,6 +165,40 @@ $scope.doAsk = function () {
 	// remove the posted question in the input
 	$scope.input.head = '';
 	$scope.input.desc = '';
+	
+	// add to tags array
+	
+	// iterate current tags
+	tags.forEach(function (tagCurrent) {
+		var isNew = 1;
+		window.alert('in tags.forEach for tagCurrent=' + tagCurrent + ' with isNew=' + isNew);
+		
+		//tagCurrent.equals(tagStored.name)
+		// iterate database tags
+		$scope.todosTags.forEach(function(tagStored) {
+			window.alert("in todosTags.forEach for tagStored.name=" + tagStored.name);
+			if(tagCurrent ==tagStored.name) { 
+				window.alert("entered if.");
+				// increase counter if tag already exists
+				tagStored.used = tagStored.used + 1;
+				$scope.todosTags.$save(tagStored);
+				isNew = 0;
+				//break; // TODO: find a break in javascript
+				window.alert("isNew=0");
+			}
+			window.alert("passed if.");
+		});
+		// add tag if it is new
+		window.alert('Currently, isNew=' + isNew);
+		if(isNew == 1) {
+			$scope.todosTags.$add({
+				name: tagCurrent,
+				used: 1
+			});
+			window.alert("isNew=1");
+		}		
+	});	
+
 };
 
 
@@ -166,7 +220,7 @@ $scope.doReply = function (todo) {
 	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
 	//var desc = $scope.XssProtection(newTodo);
 	
-	// add to DB array
+	// add to reply array
 	$scope.todosReplies.$add({
 		desc: newTodo,
 		timestamp: new Date().getTime(),
@@ -346,10 +400,6 @@ $scope.addTagToSearch = function(tag) {
 		var Msg = tag;
 	}
 	$scope.input = {head: Msg};
-}
-
-$scope.addTagToDatabase = function(tag) {
-
 }
 
 $scope.XssProtection = function($string) {
