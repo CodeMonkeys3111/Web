@@ -51,6 +51,21 @@ body {
   margin-left: auto;
 }
 
+/*Style of New Room Modal*/
+
+#newRoom {
+    color: black;
+    text-shadow: 0 0 0;
+}
+#newRoom > .modal-header{
+    padding: 35px 50px;
+    background-color: #FF8C00;
+}
+#alert-message{
+    color: red;
+    font-style: italic;
+}
+
 /* Padding for spacing */
 .inner {
   padding: 30px;

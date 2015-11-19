@@ -29,24 +29,31 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window) {
 
 
 var splits = $location.path().trim().split("/");
-var roomId = angular.lowercase(splits[1]);
-if (!roomId || roomId.length === 0) {
-	roomId = "all";
-}
+// Restructure the room as an object
+var room = {
+    roomid: angular.lowercase(splits[1]),
+};
+//var roomId = angular.lowercase(splits[1]);
+if (!room.roomid || room.roomid.length === 0) {
+	room.roomid = "all";
+};
 
 // Kaichen's firebase account
 var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
+// Backup DB (TEST ONLY)
+//var firebaseURL = "https://questionstestdb.firebaseio.com/";
 
 // create variables for firebase DB
-$scope.roomId = roomId;
-var urlQuestions = firebaseURL + roomId + "/questions/";
-var urlReplies = firebaseURL + roomId + "/replies/";
-var urlTags = firebaseURL + roomId + "/tags/";
+$scope.roomId = room.roomid;
+var urlQuestions = firebaseURL + "rooms/" + room.roomid + "/questions/";
+var urlReplies = firebaseURL + "rooms/" + room.roomid + "/replies/";
+var urlTags = firebaseURL + "rooms/" + room.roomid + "/tags/";
 var echoRefQuestions = new Firebase(urlQuestions);
 var echoRefReplies = new Firebase(urlReplies);
 var echoRefTags = new Firebase(urlTags);
 
-var queryQuestions = echoRefQuestions.orderByChild("order");	// TODO: adapt once removing the 'order' attribute
+var queryQuestions = echoRefQuestions.orderByChild("order");
+// TODO: adapt once removing the 'order' attribute
 var queryReplies = echoRefReplies.orderByChild("order");
 var queryTags = echoRefTags.orderByChild("used");
 var queryPopularTags = echoRefTags.orderByChild("used").limitToLast(5);
@@ -102,6 +109,16 @@ $scope.$watchCollection('todosReplies', function () {
 	$scope.todosReplies.forEach(function (reply) {
 
 	});
+
+}, true);
+    
+$scope.createPrivateRoom = function(){
+    
+}
+
+
+// pre-processing for collection - Tags
+$scope.$watchCollection('todosReplies', function () {
 
 }, true);
 
