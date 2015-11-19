@@ -55,7 +55,7 @@
                         Room name is required!
                     </div>
                     <div class="alert alert-warning" role="alert" ng-show="form.input.$error.pattern">
-                        Room name must be a single English word!
+                        Room name must be a English letters and numbers!
                     </div>
                     <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#newRmDialog">CREATE A ROOM</button>
 
@@ -79,7 +79,7 @@
                                                 <b style="color: red;">Room name is required!</b>
                                             </p>
                                             <p role="alert" ng-show="CreateRoom.usrname.$error.pattern">
-                                                <b style="color: orange;">Room name must be English letters!</b>
+                                                <b style="color: orange;">Room name must be English letters and numbers!</b>
                                             </p>
                                         </div>
                                         <!--Will ask user to input password if the room is a private room-->
@@ -90,7 +90,7 @@
                                                 <b style="color: red;">Password is required!</b>
                                             </p>
                                             <p role="alert" ng-show="CreateRoom.psw.$error.pattern">
-                                                <b style="color: orange;">Password must be English letters!</b>
+                                                <b style="color: orange;">Password must be English letters and numbers!</b>
                                             </p>
                                         </div>
                                         <div class="checkbox">
