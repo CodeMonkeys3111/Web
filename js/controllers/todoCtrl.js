@@ -28,23 +28,26 @@ $("#btn_top").hide();
 */
 
 var splits = $location.path().trim().split("/");
-var roomId = angular.lowercase(splits[1]);
-if (!roomId || roomId.length === 0) {
-	roomId = "all";
-}
+// Restructure the room as an object
+var room = {
+    roomid: angular.lowercase(splits[1]),
+};
+//var roomId = angular.lowercase(splits[1]);
+if (!room.roomid || room.roomid.length === 0) {
+	room.roomid = "all";
+};
 
 // Kaichen's firebase account
 var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
+// Backup DB (TEST ONLY)
+//var firebaseURL = "https://questionstestdb.firebaseio.com/";
 
 // create variables for firebase DB
-$scope.roomId = roomId;
-var url = firebaseURL + roomId + "/questions/";
-var urlReplies = firebaseURL + roomId + "/replies/";
-var privateURL = firebaseURL + "/privateList/";    //Add a DB address to store the private roomID
+$scope.roomId = room.roomid;
+var url = firebaseURL + "rooms/" + room.roomid + "/questions/";
+var urlReplies = firebaseURL + "rooms/" + room.roomid + "/replies/";
 var echoRef = new Firebase(url);
 var echoRefReplies = new Firebase(urlReplies);
-var privateRoom = new Firebase(privateURL);        //Store the ID to Firebase
-
 var query = echoRef.orderByChild("order");
 var queryReplies = echoRefReplies.orderByChild("order");
 
@@ -100,6 +103,10 @@ $scope.$watchCollection('todosReplies', function () {
 	});
 
 }, true);
+    
+$scope.createPrivateRoom = function(){
+    
+}
 
 
 
