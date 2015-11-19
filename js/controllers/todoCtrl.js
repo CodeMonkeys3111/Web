@@ -39,18 +39,23 @@ var firebaseURL = "https://cmkquestionsdb.firebaseio.com/";
 
 // create variables for firebase DB
 $scope.roomId = roomId;
-var url = firebaseURL + roomId + "/questions/";
+var urlQuestions = firebaseURL + roomId + "/questions/";
 var urlReplies = firebaseURL + roomId + "/replies/";
-var echoRef = new Firebase(url);
+var urlTags = firebaseURL + roomId + "/tags/";
+var echoRefQuestions = new Firebase(urlQuestions);
 var echoRefReplies = new Firebase(urlReplies);
+var echoRefTags = new Firebase(urlTags);
 
-var query = echoRef.orderByChild("order");
+var queryQuestions = echoRefQuestions.orderByChild("order");	// TODO: adapt once removing the 'order' attribute
 var queryReplies = echoRefReplies.orderByChild("order");
+var queryTags = echoRefTags.orderByChild("used");
+var queryPopularTags = echoRefTags.orderByChild("used").limitToLast(5);
 
-// TODO: Should we limit?
-//.limitToFirst(1000);
-$scope.todos = $firebaseArray(query);
+$scope.todos = $firebaseArray(queryQuestions);
 $scope.todosReplies = $firebaseArray(queryReplies);
+$scope.todosTags = $firebaseArray(queryTags);
+$scope.todosPopularTags = $firebaseArray(queryPopularTags);
+// TODO: find a way to invert order. todosPopularTags.reverse() does not work...
 
 $scope.editedTodo = null;
 
@@ -60,6 +65,9 @@ if($scope.predicate == undefined) {
 	$scope.predicateText = 'Date';
 	$scope.reverse = true;
 }
+
+
+
 
 
 // pre-processing for collection - Questions
@@ -76,17 +84,7 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
-		
-		// TODO: create tags for head and desc
-		// see http://www.w3schools.com/jsref/jsref_concat_array.asp
-		//var tagsDesc = todo.desc.match(/#\w+/g);
-		//var tagsHead = todo.head.match(/#\w+/g);
-		//todo.tags = tagsHead.concat(tagsDesc); 
-		
-		todo.tags = todo.head.match(/#\w+/g); // find all # plus the following word characters);
-		
-		// changes before here will be stored in DB
-		// changes after will not
+
 		$scope.todos.$save(todo);
 		
 	});
@@ -108,6 +106,12 @@ $scope.$watchCollection('todosReplies', function () {
 }, true);
 
 
+// pre-processing for collection - Tags
+$scope.$watchCollection('todosReplies', function () {
+
+}, true);
+
+
 
 // Post question
 $scope.doAsk = function () {
@@ -123,14 +127,31 @@ $scope.doAsk = function () {
 		desc = descInput;
 	}
 	
-	// add to DB array
+	
+	// extract hashtags from questions
+	var tagsHead = head.match(/#\w+/g);
+	if (tagsHead == null)
+		tagsHead = [];	// intialize to avoid error using concat
+	
+	var tagsDesc = desc.match(/#\w+/g);
+	if (tagsDesc == null)
+		tagsDesc = [];
+	// concatenate hasthags from head and desc
+	var tags = tagsHead.concat(tagsDesc);
+	
+	// convert all letters of tags to lowercase
+	tags.forEach(function(part, index) {
+		tags[index] = part.toLowerCase();
+	});
+	
+	// add to question array
 	$scope.todos.$add({
 		wholeMsgReply: '',
 		head: head,
 		desc: desc,
 		completed: false,
 		timestamp: new Date().getTime(),
-		tags: "...",
+		tags: tags,
 		like: 0,
 		dislike: 0,
 		order: 0,
@@ -139,6 +160,39 @@ $scope.doAsk = function () {
 	// remove the posted question in the input
 	$scope.input.head = '';
 	$scope.input.desc = '';
+	
+	// add to tags array
+	
+	// iterate current tags
+	tags.forEach(function (tagCurrent) {
+		var isNew = 1;
+		//window.alert('in tags.forEach for tagCurrent=' + tagCurrent + ' with isNew=' + isNew);
+		
+		// iterate database tags
+		$scope.todosTags.forEach(function(tagStored) {
+			//window.alert("in todosTags.forEach for tagStored.name=" + tagStored.name);
+			if(tagCurrent ==tagStored.name) { 
+				//window.alert("entered if.");
+				// increase counter if tag already exists
+				tagStored.used = tagStored.used + 1;
+				$scope.todosTags.$save(tagStored);
+				isNew = 0;
+				//break; // TODO: find a break in javascript
+				//window.alert("isNew=0");
+			}
+			//window.alert("passed if.");
+		});
+		// add tag if it is new
+		//window.alert('Currently, isNew=' + isNew);
+		if(isNew == 1) {
+			$scope.todosTags.$add({
+				name: tagCurrent,
+				used: 1
+			});
+			//window.alert("isNew=1");
+		}		
+	});	
+
 };
 
 
@@ -158,11 +212,11 @@ $scope.doReply = function (todo) {
 	$scope.todos.$save(todo);
 	
 	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
-	var desc = $scope.XssProtection(newTodo);
+	//var desc = $scope.XssProtection(newTodo);
 	
-	// add to DB array
+	// add to reply array
 	$scope.todosReplies.$add({
-		desc: desc,
+		desc: newTodo,
 		timestamp: new Date().getTime(),
 		order: 0,
 		parentID: todo.$id,
@@ -329,8 +383,20 @@ angular.element($window).bind("scroll", function() {
 	}
 });
 
+$scope.addTagToSearch = function(tag) {
+	try{
+		if ($scope.input.head.trim())
+			var Msg = $scope.input.head.trim() + " " + tag;
+		else
+			var Msg = tag;
+	}
+	catch(e){
+		var Msg = tag;
+	}
+	$scope.input = {head: Msg};
+}
+
 $scope.XssProtection = function($string) {
-    //var filteredMsg = "<pre>";
 	var filteredMsg = '';
     var inHashtag = false;
     for (var i = 0; i < $string.length; ++i) {
@@ -351,7 +417,6 @@ $scope.XssProtection = function($string) {
 	    	filteredMsg+=ch;
 		}
     }
-    //filteredMsg+="</pre>";
     return filteredMsg;
 };
 
