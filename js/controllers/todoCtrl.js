@@ -17,15 +17,16 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window) {
 	$scope.maxQuestion = scrollCountDelta;
 	$scope.maxReply = 2;
 
-	/*
+	/* 
 	$(window).scroll(function(){
-	if($(window).scrollTop() > 0) {
-	$("#btn_top").show();
-} else {
-$("#btn_top").hide();
-}
-});
-*/
+		if($(window).scrollTop() > 0) {
+			$("#btn_top").show();
+		} else {
+			$("#btn_top").hide();
+		} 
+	});
+	*/
+
 
 var splits = $location.path().trim().split("/");
 // Restructure the room as an object
@@ -51,12 +52,19 @@ var echoRefReplies = new Firebase(urlReplies);
 var query = echoRef.orderByChild("order");
 var queryReplies = echoRefReplies.orderByChild("order");
 
-// Should we limit?
+// TODO: Should we limit?
 //.limitToFirst(1000);
 $scope.todos = $firebaseArray(query);
 $scope.todosReplies = $firebaseArray(queryReplies);
 
 $scope.editedTodo = null;
+
+// default sorting settings
+if($scope.predicate == undefined) {
+	$scope.predicate = 'timestamp';
+	$scope.predicateText = 'Date';
+	$scope.reverse = true;
+}
 
 
 // pre-processing for collection - Questions
@@ -301,6 +309,12 @@ $scope.increaseMax = function () {
 
 $scope.toTop =function toTop() {
 	$window.scrollTo(0,0);
+};
+
+$scope.setSorting = function(predicate, predicateText){
+	$scope.predicateText = predicateText;
+    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+    $scope.predicate = predicate;
 };
 
 // Not sure what is this code. Todel
