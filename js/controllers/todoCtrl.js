@@ -53,7 +53,8 @@ var echoRefQuestions = new Firebase(urlQuestions);
 var echoRefReplies = new Firebase(urlReplies);
 var echoRefTags = new Firebase(urlTags);
 
-var queryQuestions = echoRefQuestions.orderByChild("order");	// TODO: adapt once removing the 'order' attribute
+var queryQuestions = echoRefQuestions.orderByChild("order");
+// TODO: adapt once removing the 'order' attribute
 var queryReplies = echoRefReplies.orderByChild("order");
 var queryTags = echoRefTags.orderByChild("used");
 var queryPopularTags = echoRefTags.orderByChild("used").limitToLast(5);
