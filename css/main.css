@@ -70,14 +70,26 @@ button{
 
 #toTop{
 	position: fixed;
-	bottom: 95px;
-	right: 40px;
+	bottom: 60px;
+	right: 30px;
 	cursor: pointer;
-	display: none;
 }
-#toTop .fa {margin-right: 5px;}
 
-#todo-list{
+#toTop .fa {margin-right: 3px;}
+
+#submitButton{
+	margin: 0px 5px 5px 0px;
+}
+
+#sortButton{
+	margin: 0px 5px 5px 0px;
+}
+
+#replyButton{
+	margin: 0px 0px 5px 10px;
+}
+
+#questionsContainer{
 	padding-top: 1.5em;
 }
 
@@ -86,5 +98,21 @@ button{
 }
 
 #new-todo{
-	margin-bottom: 0.2em;
+	margin-bottom: 0.4em;
+}
+
+#questionBoundary{
+	/*background-clip:content-box;*/
+	background-color: #FFFFFF; 
+	padding: 10px;
+}
+
+
+#tagButtonGroup{
+	float:right;
+	margin: 0px 0px 0px 10px;
+}
+
+#popularTagButtonGroup{
+	margin: 0px 0px 0px 0px;
 }

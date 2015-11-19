@@ -17,15 +17,18 @@
 
 	<title>Question Room: {{roomId}}</title>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
 	<!-- need this for comlted ones. TODO: can I do this in bootstrap -->
 	<link rel="stylesheet" href="css/main.css">
 
 	<!-- Custom fonts from Google Web Font -->
-	<link href='https://fonts.googleapis.com/css?family=Sigmar+One|Bubblegum+Sans' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Lobster|Merriweather+Sans:400,700italic' rel='stylesheet' type='text/css'>
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Sigmar+One|Bubblegum+Sans' type='text/css'>
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Lobster|Merriweather+Sans:400,700italic' type='text/css'>
+
+
 
 </head>
 <body ng-controller="TodoCtrl">
@@ -58,12 +61,6 @@
 	</div>
 </nav>
 
-<!--
-<a ng-class="{selected: location.path() == '/newechos'}" class="btn btn-primary" href="#/newechos">New Echos</a>
-<a ng-class="{selected: location.path() == '/tags'}" class="btn btn-success" href="#/tags">Tags</a>
-<a ng-class="{selected: location.path() == '/users'}" class="btn btn-info" href="#/users">Users</a>
-<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
--->
 <div class="container">
 	<div class="jumbotron">
 		<h1 style="font-family: 'Bubblegum Sans', cursive">Questions for {{roomId}}?</h1>
@@ -79,29 +76,56 @@
 <!-- after login -->
 <img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
 {{$authData.facebook.displayName}}
-<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>
-
-
-
+<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>		
 
 <!-- post a question -->
 <div class="container">
 	<h1 style="font-family: 'Bubblegum Sans', cursive;"><b>Let's ASK!</b></h1>
+	
+	
 	<form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
+		<!-- Question Title and Text Fields -->
+		<div class = "col-md-8">
+			<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required">
 
-		<input type="text" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required"></input>
+			<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
+		</div>
+		<!-- Question Buttons -->
+		<div class = "col-md-2">	
+			<span class="form-group-btn">
+				<button id="submitButton" class="btn btn-default btn-primary btn-lg btn-block" type="submit">Ask!</button>
+			</span>
 
-		<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
-	<span class="form-group-btn">
-		<button class="btn btn-default btn-primary" type="submit">Ask!</button>
-	</span>
+			<div class="dropdown">
+				<button id="sortButton" class="btn btn-default btn-default btn-block dropdown-toggle" type="button" id="sortingDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort by: {{predicateText}} <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="" ng-click="setSorting('-timestamp','Date')">Date</a></li>
+					<li><a href="" ng-click="setSorting('order','Rating')">Rating</a></li>
+					<li><a href="" ng-click="setSorting('-like','Likes')">Likes</a></li>
+					<li><a href="" ng-click="setSorting('-dislike','Dislikes')">Dislikes</a></li>
+				</ul>
+			</div>
+		</div>	
+		<!-- Tag Bar -->
+		<div class = "col-md-10">	
+			<div class="btn-group" id="popularTagButtonGroup" >
+				<!-- use reverse() since these are the most popular tags in ascending order. -->
+				<button class="btn btn-default btn-xs glyphicon glyphicon-tag" ng-repeat="tag in todosPopularTags" ng-click="addTagToSearch(tag.name)">{{tag.name.substr(1)}}</button>
+			</div>
+		</div>
+			
 	</form>
 </div>
-<div class="container">
+
+
+
+<div id="questionsContainer" class="container"> 
+	<div class = "col-md-10">
 	<!-- Question Bounder -->
-	<div class="list-group" style="background-color: #FFFFFF; padding: 10px">
+	<div id="questionBoundary" class="list-group">
 		<!-- Iterate Questions -->
-		<div class="media" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+		<div class="media" ng-repeat="todo in todos | filter:input.head |filter:input.desc | questionFilter:maxQuestion | orderBy:predicate:reverse" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 			<!-- Display Avatar -->
 			<div class="media-left">
 				<a href="#">
@@ -112,12 +136,13 @@
 			<div class="media-body">
 				<!-- Question Heading -->
 				<h4 class="media-heading">
-					<span class="label label-danger" ng-show="todo.new">New</span>
+						<span class="label label-danger" ng-show="isNew(todo)">New</span>
 					<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 				</h4>
 				<div style="font-family: 'Merriweather Sans', sans-serif; font-style: italic">{{todo.desc}}<br></div>
 				<small style="margin-top:5px; color:#848484">
-					<em>created: {{ todo.timestamp | date:'medium' }}</em>
+					<em>Created: <time title="{{ todo.timestamp | date:'medium'}}" am-time-ago="todo.timestamp"</time></em>
+					
 				</small>
 				<div>
 					<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLike(todo)" ng-disabled="$storage[todo.$id]">Like<span class="badge">{{todo.like}}</span></button>
@@ -126,6 +151,9 @@
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 					&nbsp;
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+					<div class="btn-group" id="tagButtonGroup" >
+						<button class="btn btn-default btn-xs glyphicon glyphicon-tag" ng-repeat="tag in todo.tags" ng-click="addTagToSearch(tag)">{{tag.substr(1)}}</button>
+					</div>
 				</div>
 
 				<div class="list-group" style="background-color: #F5F5F5;">
@@ -144,11 +172,11 @@
 							</h4>
 							{{reply.desc}}<br>
 							<small style="margin-top:5px; color:#848484">
-								<em>created: {{ reply.timestamp | date:'medium' }}</em>
+								<em>Created:</em> <em title="{{ reply.timestamp | date:'medium'}}" am-time-ago="reply.timestamp"></em>
 							</small>
 							<div>
 								<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
-								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Disike</button>
+								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Dislike</button>
 								&nbsp;
 								<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
 							</div>
@@ -156,25 +184,28 @@
 					</div>
 				</div>
 				<div class="input-group" style="margin-left:50px">
-						<textarea type="text" id="new-todo-reply" class="form-control" placeholder="Have Answer? Save their day!" ng-model="todo.wholeMsgReply">
+						<textarea type="text" id="new-todo-reply" class="form-control" placeholder="Have an Answer? Save their day!" ng-model="todo.wholeMsgReply">
 						</textarea>
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" ng-click="doReply(todo)">Reply!</button>
+							<button id="replyButton" class="btn btn-default" type="button" ng-click="doReply(todo)">Reply!</button>
 						</span>
 				</div>
 			</div>
 		</div>
 	</div>
 	<hr style="border-color: #ff8c00">
+	</div>
 </div>
-<!--
-<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
-<button ng-hide="totalCount<=maxQuestion"
-class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
-type="button" ng-click="increaseMax()"> Show more</button>
--->
+
+<!-- static toTop button and Show More questions button-->
+<div id="toTop" class="btn btn-default" ng-click="toTop()"><span class="fa fa-arrow-up">To Top</span></div>
+<button ng-hide="totalCount<=maxQuestion" class="pull-right btn btn-default glyphicon glyphicon-arrow-down" type="button" ng-click="increaseMax()"> Show More
+</button>
 
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
@@ -193,5 +224,10 @@ type="button" ng-click="increaseMax()"> Show more</button>
 <script src="js/directives/todoFocus.js"></script>
 <script src="js/directives/todoBlur.js"></script>
 <script src="js/directives/todoEscape.js"></script>
+
+<!-- load momentJS (required for angular-moment) -->
+<script src="js/lib/moment.min.js"></script>
+<!-- load angular-moment -->
+<script src="js/lib/angular-moment.min.js"></script>
 </body>
 </html>
