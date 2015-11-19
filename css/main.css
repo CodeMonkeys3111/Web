@@ -112,3 +112,7 @@ button{
 	float:right;
 	margin: 0px 0px 0px 10px;
 }
+
+#popularTagButtonGroup{
+	margin: 0px 0px 0px 0px;
+}

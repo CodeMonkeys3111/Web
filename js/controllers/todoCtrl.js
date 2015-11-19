@@ -49,10 +49,13 @@ var echoRefTags = new Firebase(urlTags);
 var queryQuestions = echoRefQuestions.orderByChild("order");	// TODO: adapt once removing the 'order' attribute
 var queryReplies = echoRefReplies.orderByChild("order");
 var queryTags = echoRefTags.orderByChild("used");
+var queryPopularTags = echoRefTags.orderByChild("used").limitToLast(5);
 
 $scope.todos = $firebaseArray(queryQuestions);
 $scope.todosReplies = $firebaseArray(queryReplies);
 $scope.todosTags = $firebaseArray(queryTags);
+$scope.todosPopularTags = $firebaseArray(queryPopularTags);
+// TODO: find a way to invert order. todosPopularTags.reverse() does not work...
 
 $scope.editedTodo = null;
 
@@ -62,6 +65,9 @@ if($scope.predicate == undefined) {
 	$scope.predicateText = 'Date';
 	$scope.reverse = true;
 }
+
+
+
 
 
 // pre-processing for collection - Questions
@@ -133,21 +139,10 @@ $scope.doAsk = function () {
 	// concatenate hasthags from head and desc
 	var tags = tagsHead.concat(tagsDesc);
 	
+	// convert all letters of tags to lowercase
 	tags.forEach(function(part, index) {
-		window.alert('Before: tagCurrent=' + tags[index]);
 		tags[index] = part.toLowerCase();
-		window.alert('After: tagCurrent=' + tags[index]);
 	});
-	
-	// all letters of tags are lowercase
-	/*
-	tags.forEach(function (tagCurrent) {
-		window.alert('Before: tagCurrent=' + tagCurrent);
-		tagCurrent = tagCurrent.toLowerCase();
-		tags.$save(tagCurrent);
-		window.alert('After: tagCurrent=' + tagCurrent);
-	});
-	*/
 	
 	// add to question array
 	$scope.todos.$add({
@@ -171,31 +166,30 @@ $scope.doAsk = function () {
 	// iterate current tags
 	tags.forEach(function (tagCurrent) {
 		var isNew = 1;
-		window.alert('in tags.forEach for tagCurrent=' + tagCurrent + ' with isNew=' + isNew);
+		//window.alert('in tags.forEach for tagCurrent=' + tagCurrent + ' with isNew=' + isNew);
 		
-		//tagCurrent.equals(tagStored.name)
 		// iterate database tags
 		$scope.todosTags.forEach(function(tagStored) {
-			window.alert("in todosTags.forEach for tagStored.name=" + tagStored.name);
+			//window.alert("in todosTags.forEach for tagStored.name=" + tagStored.name);
 			if(tagCurrent ==tagStored.name) { 
-				window.alert("entered if.");
+				//window.alert("entered if.");
 				// increase counter if tag already exists
 				tagStored.used = tagStored.used + 1;
 				$scope.todosTags.$save(tagStored);
 				isNew = 0;
 				//break; // TODO: find a break in javascript
-				window.alert("isNew=0");
+				//window.alert("isNew=0");
 			}
-			window.alert("passed if.");
+			//window.alert("passed if.");
 		});
 		// add tag if it is new
-		window.alert('Currently, isNew=' + isNew);
+		//window.alert('Currently, isNew=' + isNew);
 		if(isNew == 1) {
 			$scope.todosTags.$add({
 				name: tagCurrent,
 				used: 1
 			});
-			window.alert("isNew=1");
+			//window.alert("isNew=1");
 		}		
 	});	
 
