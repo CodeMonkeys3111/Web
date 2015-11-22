@@ -288,9 +288,47 @@ describe('TodoCtrl', function() {
 
         scope.setSorting("bye", "hi");
         expect(scope.reverse).toEqual(false);
+        expect(scope.predicateText).toEqual("hi");
+        expect(scope.predicate).toEqual("bye");
 
         scope.setSorting("bye", "bye");
         expect(scope.reverse).toEqual(true);
+
+      })
+
+      it('getSorting Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.predicateText = "hi";
+        scope.predicate = "bye";
+        scope.reverse = true;
+
+        scope.setSorting("bye", "hi");
+        expect(scope.reverse).toEqual(false);
+        expect(scope.predicateText).toEqual("hi");
+        expect(scope.predicate).toEqual("bye");
+
+        scope.setSorting("bye", "bye");
+        expect(scope.reverse).toEqual(true);
+
+      })
+
+      it('addTagToSearch Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.input = {
+          head: " Hello "
+        };
+        scope.addTagToSearch(1);
+        expect(scope.input.head).toEqual("Hello 1");
+
+        scope.input = {
+          head: ""
+        };
+        scope.addTagToSearch(1);
+        expect(scope.input.head).toEqual(1);
       })
 
 
