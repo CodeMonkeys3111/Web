@@ -259,6 +259,39 @@ describe('TodoCtrl', function() {
         scope.toggleCompleted(todo);
         expect(todo.completed).toEqual(false);
       })
+      /*
+      it('markAll Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.todos = [{completed: true,
+        },
+        {completed: true,
+        },
+        {completed: false, 
+        },
+        {completed: false,
+        }];
+        scope.todos.$save = function(todo){} 
+        scope.markAll(false);
+        expect(todos[0].completed).toEqual(false);
+      })
+      */
+
+      it('getSorting Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.predicateText = "hi";
+        scope.predicate = "bye";
+        scope.reverse = true;
+
+        scope.setSorting("bye", "hi");
+        expect(scope.reverse).toEqual(false);
+
+        scope.setSorting("bye", "bye");
+        expect(scope.reverse).toEqual(true);
+      })
 
 
     });
