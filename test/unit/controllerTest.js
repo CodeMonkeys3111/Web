@@ -249,5 +249,17 @@ describe('TodoCtrl', function() {
         expect(todo.order).toEqual(1);
       })
 
+      it('toggleCompleted Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          completed: true
+        }
+        scope.toggleCompleted(todo);
+        expect(todo.completed).toEqual(false);
+      })
+
+
     });
   });
