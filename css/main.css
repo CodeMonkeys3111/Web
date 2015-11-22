@@ -1,15 +1,60 @@
+body {
+	min-height: 2000px;
+	padding-top: 70px;
+	background-color: darkorange;
+}
+
+
+.navbar-text{
+	padding-left: 60px;
+	font-family: 'Bubblegum Sans', cursive;
+	text-align: center;
+}
+
+.navbar .navbar-nav {
+	display: inline-block;
+	float: none;
+	vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+	text-align: center;
+}
+
+small{
+	font-family: 'Merriweather Sans', sans-serif;
+	font-style: italic;
+}
+a{
+	font-family: 'Merriweather Sans', sans-serif;
+}
+button{
+	font-family: 'Bubblegum Sans', cursive;
+	font-size: 30px;
+}
+
+.media-heading, .list-group-item-text{
+	font-family: 'Merriweather Sans', sans-serif;
+	font-style: italic;
+}
 .completed {
 	color: #d9d9d9;
 	text-decoration: line-through;
 }
+.navbar-brand{
+	font-family: 'Sigmar One', cursive;
+}
 
+.form-control{
+	font-family: 'Bubblegum Sans', cursive;
+}
 
 .icon{display: inline-block;}
 .icon,
 .icon + span{vertical-align: middle;}
 
 .icon.facebook{
-  background: url(../img/icon-facebook.png) no-repeat 0 0;
+  background: url("2000px-Facebook_icon_2013.svg.png") no-repeat 0 0;
   height: 29px;
   width: 38px;
 }
@@ -25,10 +70,49 @@
 
 #toTop{
 	position: fixed;
-	bottom: 95px;
-	right: 40px;
+	bottom: 60px;
+	right: 30px;
 	cursor: pointer;
-	display: none;
 }
-#toTop .fa {margin-right: 5px;}
 
+#toTop .fa {margin-right: 3px;}
+
+#submitButton{
+	margin: 0px 5px 5px 0px;
+}
+
+#sortButton{
+	margin: 0px 5px 5px 0px;
+}
+
+#replyButton{
+	margin: 0px 0px 5px 10px;
+}
+
+#questionsContainer{
+	padding-top: 1.5em;
+}
+
+#questionTitleText{
+	margin-bottom: 0.2em;
+}
+
+#new-todo{
+	margin-bottom: 0.4em;
+}
+
+#questionBoundary{
+	/*background-clip:content-box;*/
+	background-color: #FFFFFF; 
+	padding: 10px;
+}
+
+
+#tagButtonGroup{
+	float:right;
+	margin: 0px 0px 0px 10px;
+}
+
+#popularTagButtonGroup{
+	margin: 0px 0px 0px 0px;
+}
