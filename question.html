@@ -50,33 +50,13 @@
 				<p class="navbar-text"><b>Ask, Answer, Learn.</b></p>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="index.html" style="font-family: 'Bubblegum Sans', cursive">Home!</a></li>
-				<li>
-					<button type="button" class="btn btn-default navbar-btn" ng-hide="$authData" ng-click="FBLogin()">
-						Sign in with Facebook!
-					</button>
-				</li>
+				<li><a href="index.html" style="font-family: 'Bubblegum Sans', cursive">Change Room</a></li>
 			</ul>
 		</div><!--/.nav-collapse -->
 	</div>
 </nav>
 
-<div class="container">
-	<div class="jumbotron">
-		<h1 style="font-family: 'Bubblegum Sans', cursive">Questions for {{roomId}}?</h1>
-		<p style="font-family: 'Bubblegum Sans', cursive">This is the question room of {{roomId}}, you can post your questions anonymously, or try to save someone's day by reply them if you know the answer! :D </p>
-		<p style="font-family: 'Bubblegum Sans', cursive">To share this room to your classmates or your friends, feel free to copy and paste the url below, or just click the button.</p>
-		<small>Share room url: {{absurl}}</small> &nbsp;
-		<p>
-			<a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button" style="font-family: 'Bubblegum Sans', cursive">Share room to others! &raquo;</a>
-		</p>
-	</div>
-</div>
 
-<!-- after login -->
-<img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
-{{$authData.facebook.displayName}}
-<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>		
 
 <!-- post a question -->
 <div class="container">
@@ -101,7 +81,7 @@
 				</button>
 				<ul class="dropdown-menu">
 					<li><a href="" ng-click="setSorting('-timestamp','Date')">Date</a></li>
-					<li><a href="" ng-click="setSorting('order','Rating')">Rating</a></li>
+					<li><a href="" ng-click="setSorting(hotValue,'Hot')">Hot</a></li>
 					<li><a href="" ng-click="setSorting('-like','Likes')">Likes</a></li>
 					<li><a href="" ng-click="setSorting('-dislike','Dislikes')">Dislikes</a></li>
 				</ul>
@@ -155,6 +135,7 @@
 						<button class="btn btn-default btn-xs glyphicon glyphicon-tag" ng-repeat="tag in todo.tags" ng-click="addTagToSearch(tag)">{{tag.substr(1)}}</button>
 					</div>
 				</div>
+				&nbsp;
 
 				<div class="list-group" style="background-color: #F5F5F5;">
 					<!-- Iterate Replies -->
@@ -166,15 +147,12 @@
 						<!-- Replies Body -->
 						<div class="media-body">
 							<!--  Replies Heading-->
-							<h4 class="media-heading">
-								<span class="badge progress-bar-warning">{{-reply.order}}</span>
-								<span ng-class="{completed: todo.completed}">Reply to: {{todo.head}}</span>
-							</h4>
 							{{reply.desc}}<br>
 							<small style="margin-top:5px; color:#848484">
 								<em>Created:</em> <em title="{{ reply.timestamp | date:'medium'}}" am-time-ago="reply.timestamp"></em>
 							</small>
 							<div>
+								<span class="badge progress-bar-warning">{{-reply.order}}</span>
 								<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
 								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Dislike</button>
 								&nbsp;
