@@ -377,8 +377,6 @@ $scope.setSorting = function(predicate, predicateText){
 	$scope.predicateText = predicateText;
     $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
     $scope.predicate = predicate;
-	// }
-    alert($scope.predicate);
 };
 
 //Calculates hotness
