@@ -47,10 +47,10 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<p class="navbar-text"><b>Ask, Answer, Learn.</b></p>
+				<p class="navbar-text">Question Room: <b>{{roomId}}</b></p>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="index.html" style="font-family: 'Bubblegum Sans', cursive">Change Room</a></li>
+				<li><a href="index.html">Change Room</a></li>
 			</ul>
 		</div><!--/.nav-collapse -->
 	</div>
@@ -133,7 +133,6 @@
 						<button class="btn btn-default btn-xs glyphicon glyphicon-tag" ng-repeat="tag in todo.tags" ng-click="addTagToSearch(tag)">{{tag.substr(1)}}</button>
 					</div>
 				</div>
-				&nbsp;
 
 				<div class="list-group" style="background-color: #F5F5F5;">
 					<!-- Iterate Replies -->
