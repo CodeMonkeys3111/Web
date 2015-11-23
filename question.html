@@ -56,8 +56,6 @@
 	</div>
 </nav>
 
-
-
 <!-- post a question -->
 <div class="container">
 	<h1 style="font-family: 'Bubblegum Sans', cursive;"><b>Let's ASK!</b></h1>
@@ -66,9 +64,9 @@
 	<form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
 		<!-- Question Title and Text Fields -->
 		<div class = "col-md-8">
-			<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required">
+			<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter question title or search" autofocus="" required="" maxlength="128" title="A title is required">
 
-			<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
+			<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter question text or search" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
 		</div>
 		<!-- Question Buttons -->
 		<div class = "col-md-2">	
