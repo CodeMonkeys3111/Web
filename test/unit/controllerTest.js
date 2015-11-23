@@ -340,7 +340,7 @@ describe('TodoCtrl', function() {
         }
         expect(scope.isNew(todo)).toEqual(true);
         var todo = {
-          timestamp: new Date().getTime() -180001 // < 3min ago
+          timestamp: new Date().getTime() -180001 // less than 3min ago
         }
         expect(scope.isNew(todo)).toEqual(false);
       })
