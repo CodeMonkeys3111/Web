@@ -249,5 +249,102 @@ describe('TodoCtrl', function() {
         expect(todo.order).toEqual(1);
       })
 
+      it('toggleCompleted Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          completed: true
+        }
+        scope.toggleCompleted(todo);
+        expect(todo.completed).toEqual(false);
+      })
+      /*
+      it('markAll Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.todos = [{completed: true,
+        },
+        {completed: true,
+        },
+        {completed: false, 
+        },
+        {completed: false,
+        }];
+        scope.todos.$save = function(todo){} 
+        scope.markAll(false);
+        expect(todos[0].completed).toEqual(false);
+      })
+      */
+
+      it('getSorting Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.predicateText = "hi";
+        scope.predicate = "bye";
+        scope.reverse = true;
+
+        scope.setSorting("bye", "hi");
+        expect(scope.reverse).toEqual(false);
+        expect(scope.predicateText).toEqual("hi");
+        expect(scope.predicate).toEqual("bye");
+
+        scope.setSorting("bye", "bye");
+        expect(scope.reverse).toEqual(true);
+
+      })
+
+      it('getSorting Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.predicateText = "hi";
+        scope.predicate = "bye";
+        scope.reverse = true;
+
+        scope.setSorting("bye", "hi");
+        expect(scope.reverse).toEqual(false);
+        expect(scope.predicateText).toEqual("hi");
+        expect(scope.predicate).toEqual("bye");
+
+        scope.setSorting("bye", "bye");
+        expect(scope.reverse).toEqual(true);
+
+      })
+
+      it('addTagToSearch Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        scope.input = {
+          head: " Hello "
+        };
+        scope.addTagToSearch(1);
+        expect(scope.input.head).toEqual("Hello 1");
+
+        scope.input = {
+          head: ""
+        };
+        scope.addTagToSearch(1);
+        expect(scope.input.head).toEqual(1);
+      })
+
+      it('isNew Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          timestamp: new Date().getTime() // now
+        }
+        expect(scope.isNew(todo)).toEqual(true);
+        var todo = {
+          timestamp: new Date().getTime() -180001 // less than 3min ago
+        }
+        expect(scope.isNew(todo)).toEqual(false);
+      })
+
+
     });
   });

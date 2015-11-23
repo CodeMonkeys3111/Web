@@ -47,36 +47,14 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<p class="navbar-text"><b>Ask, Answer, Learn.</b></p>
+				<p class="navbar-text">Question Room: <b>{{roomId}}</b></p>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="index.html" style="font-family: 'Bubblegum Sans', cursive">Home!</a></li>
-				<li>
-					<button type="button" class="btn btn-default navbar-btn" ng-hide="$authData" ng-click="FBLogin()">
-						Sign in with Facebook!
-					</button>
-				</li>
+				<li><a href="index.html">Change Room</a></li>
 			</ul>
 		</div><!--/.nav-collapse -->
 	</div>
 </nav>
-
-<div class="container">
-	<div class="jumbotron">
-		<h1 style="font-family: 'Bubblegum Sans', cursive">Questions for {{roomId}}?</h1>
-		<p style="font-family: 'Bubblegum Sans', cursive">This is the question room of {{roomId}}, you can post your questions anonymously, or try to save someone's day by reply them if you know the answer! :D </p>
-		<p style="font-family: 'Bubblegum Sans', cursive">To share this room to your classmates or your friends, feel free to copy and paste the url below, or just click the button.</p>
-		<small>Share room url: {{absurl}}</small> &nbsp;
-		<p>
-			<a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button" style="font-family: 'Bubblegum Sans', cursive">Share room to others! &raquo;</a>
-		</p>
-	</div>
-</div>
-
-<!-- after login -->
-<img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
-{{$authData.facebook.displayName}}
-<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>		
 
 <!-- post a question -->
 <div class="container">
@@ -86,9 +64,9 @@
 	<form id="todo-form" ng-submit="doAsk()" class="ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-minlength">
 		<!-- Question Title and Text Fields -->
 		<div class = "col-md-8">
-			<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter Question Title" autofocus="" required="" maxlength="128" title="A title is required">
+			<input type="text" id="questionTitleText" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" ng-model="input.head" placeholder="Enter question title or search" autofocus="" required="" maxlength="128" title="A title is required">
 
-			<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter Question Text or Search Questions" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
+			<textarea type="text" id="new-todo" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-untouched" placeholder="Enter question text or search" ng-model="input.desc" ng-maxlength="1024" title="Less than 1024 characters"></textarea>
 		</div>
 		<!-- Question Buttons -->
 		<div class = "col-md-2">	
@@ -101,7 +79,7 @@
 				</button>
 				<ul class="dropdown-menu">
 					<li><a href="" ng-click="setSorting('-timestamp','Date')">Date</a></li>
-					<li><a href="" ng-click="setSorting('order','Rating')">Rating</a></li>
+					<li><a href="" ng-click="setSorting(hotValue,'Hot')">Hot</a></li>
 					<li><a href="" ng-click="setSorting('-like','Likes')">Likes</a></li>
 					<li><a href="" ng-click="setSorting('-dislike','Dislikes')">Dislikes</a></li>
 				</ul>
@@ -166,15 +144,12 @@
 						<!-- Replies Body -->
 						<div class="media-body">
 							<!--  Replies Heading-->
-							<h4 class="media-heading">
-								<span class="badge progress-bar-warning">{{-reply.order}}</span>
-								<span ng-class="{completed: todo.completed}">Reply to: {{todo.head}}</span>
-							</h4>
 							{{reply.desc}}<br>
 							<small style="margin-top:5px; color:#848484">
 								<em>Created:</em> <em title="{{ reply.timestamp | date:'medium'}}" am-time-ago="reply.timestamp"></em>
 							</small>
 							<div>
+								<span class="badge progress-bar-warning">{{-reply.order}}</span>
 								<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
 								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Dislike</button>
 								&nbsp;

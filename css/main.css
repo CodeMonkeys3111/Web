@@ -17,6 +17,10 @@ body {
 	vertical-align: top;
 }
 
+.navbar-right {
+	font-family: 'Bubblegum Sans', cursive;
+}
+
 .navbar .navbar-collapse {
 	text-align: center;
 }
@@ -25,9 +29,7 @@ small{
 	font-family: 'Merriweather Sans', sans-serif;
 	font-style: italic;
 }
-a{
-	font-family: 'Merriweather Sans', sans-serif;
-}
+
 button{
 	font-family: 'Bubblegum Sans', cursive;
 	font-size: 30px;
@@ -42,7 +44,7 @@ button{
 	text-decoration: line-through;
 }
 .navbar-brand{
-	font-family: 'Sigmar One', cursive;
+	font-family: 'Bubblegum Sans', cursive;
 }
 
 .form-control{
