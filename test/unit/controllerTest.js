@@ -331,6 +331,20 @@ describe('TodoCtrl', function() {
         expect(scope.input.head).toEqual(1);
       })
 
+      it('isNew Testing', function(){
+        var ctrl = controller('TodoCtrl', {
+        $scope: scope
+        });
+        var todo = {
+          timestamp: new Date().getTime() // now
+        }
+        expect(scope.isNew(todo)).toEqual(true);
+        var todo = {
+          timestamp: new Date().getTime() -180001 // < 3min ago
+        }
+        expect(scope.isNew(todo)).toEqual(false);
+      })
+
 
     });
   });
