@@ -379,6 +379,11 @@ $scope.setSorting = function(predicate, predicateText){
     $scope.predicate = predicate;
 };
 
+//Calculates hotness
+$scope.hotValue = function(todo) {
+   return -todo.timestamp - 7200000*(3*todo.like + 2*todo.replies + todo.dislike);
+};
+
 // Not sure what is this code. Todel
 if ($location.path() === '') {
 	$location.path('/');
