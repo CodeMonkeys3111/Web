@@ -52,8 +52,7 @@ var echoRefQuestions = new Firebase(urlQuestions);
 var echoRefReplies = new Firebase(urlReplies);
 var echoRefTags = new Firebase(urlTags);
 
-var queryQuestions = echoRefQuestions.orderByChild("order");
-// TODO: adapt once removing the 'order' attribute
+var queryQuestions = echoRefQuestions.orderByChild("timestamp");
 var queryReplies = echoRefReplies.orderByChild("order");
 var queryTags = echoRefTags.orderByChild("used");
 var queryPopularTags = echoRefTags.orderByChild("used").limitToLast(5);
@@ -171,7 +170,7 @@ $scope.doAsk = function () {
 		tags: tags,
 		like: 0,
 		dislike: 0,
-		order: 0,
+		lastTimestamp: new Date().getTime(),
 		replies: 0
 	});
 	// remove the posted question in the input
@@ -226,10 +225,8 @@ $scope.doReply = function (todo) {
 	// update replies counter of the corresponding question
 	$scope.editedTodo = todo;
 	todo.replies = todo.replies + 1;
+	todo.lastTimestamp = new Date().getTime();
 	$scope.todos.$save(todo);
-	
-	// TODO: Seems to be superfluous if not trusting the desc as HTML anyway
-	//var desc = $scope.XssProtection(newTodo);
 	
 	// add to reply array
 	$scope.todosReplies.$add({
@@ -244,8 +241,6 @@ $scope.doReply = function (todo) {
 	$scope.todos.$save(todo);
 	
 };
-
-
 
 $scope.editTodo = function (todo) {
 	$scope.editedTodo = todo;
@@ -263,8 +258,6 @@ $scope.isNew = function (todo) {
 $scope.doLike = function (todo) {
 	$scope.editedTodo = todo;
 	todo.like = todo.like + 1;
-	// Hack to order using this order.
-	todo.order = todo.order - 1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
@@ -274,8 +267,6 @@ $scope.doLike = function (todo) {
 $scope.doDislike = function (todo) {
 	$scope.editedTodo = todo;
 	todo.dislike = todo.dislike + 1;
-	// Hack to order using this order.
-	todo.order = todo.order + 1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
@@ -284,7 +275,6 @@ $scope.doDislike = function (todo) {
 
 $scope.doLikeReply = function (reply) {
 	$scope.editedReply = reply;
-	// Hack to order using this order.
 	reply.order = reply.order - 1;
 	$scope.todosReplies.$save(reply);
 
@@ -294,7 +284,6 @@ $scope.doLikeReply = function (reply) {
 
 $scope.doDislikeReply = function (reply) {
 	$scope.editedReply = reply;
-	// Hack to order using this order.
 	reply.order = reply.order + 1;
 	$scope.todosReplies.$save(reply);
 
@@ -369,7 +358,7 @@ $scope.increaseMax = function () {
 	}
 };
 
-$scope.toTop =function toTop() {
+$scope.toTop = function toTop() {
 	$window.scrollTo(0,0);
 };
 
