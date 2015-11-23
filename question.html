@@ -135,8 +135,8 @@
 				</div>
 
 				<div class="list-group" style="background-color: #F5F5F5;">
-					<!-- Iterate Replies -->
-					<div class="media" ng-repeat="reply in todosReplies | filter:{'parentID':todo.$id} : true " style="padding: 10px">
+					<!-- Iterate Replies, order descending -->
+					<div class="media" ng-repeat="reply in todosReplies | filter:{'parentID':todo.$id} : true | orderBy: '-order'" style="padding: 10px">
 						<!--Replier Avatar-->
 						<a class="media-left" href="#">
 							<img class="media-object" src="http://www.meine-erste-homepage.com/avatare/Simpsons/Simpsons040.gif" alt="Generic placeholder image">
@@ -149,7 +149,8 @@
 								<em>Created:</em> <em title="{{ reply.timestamp | date:'medium'}}" am-time-ago="reply.timestamp"></em>
 							</small>
 							<div>
-								<span class="badge progress-bar-warning">{{-reply.order}}</span>
+                                <!-- change the reply.order display and fixed the issue of showing negative number -->
+								<span class="badge progress-bar-warning">{{reply.order}}</span>
 								<button class="btn btn-success btn-xs glyphicon glyphicon-thumbs-up" ng-click="doLikeReply(reply)" ng-disabled="$storage[reply.$id]">Like</button>
 								<button class="btn btn-danger btn-xs glyphicon glyphicon-thumbs-down" ng-click="doDislikeReply(reply)" ng-disabled="$storage[reply.$id]">Dislike</button>
 								&nbsp;

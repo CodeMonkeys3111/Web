@@ -275,7 +275,7 @@ $scope.doDislike = function (todo) {
 
 $scope.doLikeReply = function (reply) {
 	$scope.editedReply = reply;
-	reply.order = reply.order - 1;
+	reply.order = reply.order + 1;
 	$scope.todosReplies.$save(reply);
 
 	// Disable the button
@@ -284,7 +284,7 @@ $scope.doLikeReply = function (reply) {
 
 $scope.doDislikeReply = function (reply) {
 	$scope.editedReply = reply;
-	reply.order = reply.order + 1;
+	reply.order = reply.order - 1;
 	$scope.todosReplies.$save(reply);
 
 	// Disable the button
