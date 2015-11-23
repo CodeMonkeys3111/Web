@@ -15,14 +15,10 @@ todomvc.filter('questionFilter', function () {
     angular.forEach(input, function (todo) {
 	  // create list with the new questions
       if (todo.timestamp > new Date().getTime() - 180000) { // 3min
-		  //todo.new = true; 
-		  //TODO: needed so that new label is set straight after posting a question, but this creates an unwanted attribute todo.new
-        newQuestions.push(todo);
+		  newQuestions.push(todo);
 	  // creates list for remaining questions
       } else if (sortedCount++<=max){ 
-		  //todo.new = false; 
-		  // TODO: see above
-        sorted.push(todo);
+		  sorted.push(todo);
       }
 
       // sort the list of new questions based on the time if echo is the same.

@@ -34,65 +34,215 @@
 				<div class="inner cover">
 					<h1 class="cover-heading">Scared to Ask Questions in Class?</h1>
 					<p class="lead">This totally anonymous and real-time updating question moderated system permits students to ask more questions in a typical class setting.
-						Simply join a question room using a simple name (such as comp3111).</p>
-						<p class="lead" class="col-md-2 col-md-offset-5">
-							<form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
-								<input type="text" name = "input" class="form-control large"
-								ng-model="example.text"
-								ng-pattern="example.word" required
-								ng-trim="false"
-								autofocus
-								aria-describedby="sizing-addon1"
-								placeholder="Room name">
-								<a href="#" class="btn btn-lg btn-default"
-								ng-hide="form.input.$error.required || form.input.$error.pattern"
-								ng-click="join()"
-								>Join</a>
-							</form>
-						</p>
+						Simply join a question room using a simple name (such as comp3111).
+                    </p>
+                    <p class="lead" class="col-md-2 col-md-offset-5">
+                        <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
+                            <input type="text" name = "input" class="form-control large"
+                            ng-model="roomName.text"
+                            ng-pattern="roomName.word" required
+                            ng-trim="false"
+                            autofocus
+                            aria-describedby="sizing-addon1"
+                            placeholder="Room name">
+                            <a href="#" class="btn btn-lg btn-default"
+                            ng-hide="form.input.$error.required || form.input.$error.pattern"
+                            ng-click="join()"
+                            >Join</a>
+                        </form>
+                    </p>
+                    <div class="alert alert-warning" role="alert" ng-show="form.input.$error.required">
+                        Room name is required!
+                    </div>
+                    <div class="alert alert-warning" role="alert" ng-show="form.input.$error.pattern">
+                        Room name must be a English letters and numbers!
+                    </div>
+                    <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#newRmDialog">CREATE A ROOM</button>
 
-						<div class="alert alert-warning" role="alert" ng-show="form.input.$error.required">
-							Room name is required!</div>
-							<div class="alert alert-warning" role="alert" ng-show="form.input.$error.pattern">
-								Room name must be a single English word!
-							</div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="newRmDialog" role="dialog">
+                        <div class="modal-dialog">
 
-						</div>
+                            <!-- Modal content-->
+                            <div id="newRoom" class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title"><span class="glyphicon glyphicon-pushpin"></span> Create A New Room</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form" name="CreateRoom">
+                                        <div class="form-group">
+                                            <label for="usrname"><span class="glyphicon glyphicon-home"></span> Room Name</label>
+                                            <input type="text" class="form-control" name="usrname" placeholder="Your Room Name"
+                                                   ng-model="newRoomName.text" ng-pattern="newRoomName.word" required>
+                                            <p role="alert" ng-show="CreateRoom.usrname.$error.required">
+                                                <b style="color: red;">Room name is required!</b>
+                                            </p>
+                                            <p role="alert" ng-show="CreateRoom.usrname.$error.pattern">
+                                                <b style="color: orange;">Room name must be English letters and numbers!</b>
+                                            </p>
+                                        </div>
+                                        <!--Will ask user to input password if the room is a private room-->
+                                        <div class="form-group" ng-show="checkBoxValue.isPrivate">
+                                            <label for="psw"><span class="glyphicon glyphicon-barcode"></span> Password</label>
+                                            <input type="text" class="form-control" name="psw" placeholder="Enter password" ng-model="PasswordBoxValue.Password" ng-pattern="PasswordBoxValue.checkValid" required>
+                                            <p role="alert" ng-show="CreateRoom.psw.$error.required">
+                                                <b style="color: red;">Password is required!</b>
+                                            </p>
+                                            <p role="alert" ng-show="CreateRoom.psw.$error.pattern">
+                                                <b style="color: orange;">Password must be English letters and numbers!</b>
+                                            </p>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="check" ng-model="checkBoxValue.isPrivate" value="">Private Room?</label>
+                                        </div>
+                                      <button type="submit" class="btn btn-success btn-block" ng-hide="CreateRoom.usrname.$error.required || CreateRoom.usrname.$error.pattern || checkBoxValue.isPrivate" ng-click="createRoom()">
+                                          <span class="glyphicon glyphicon-ok"></span> 
+                                          Create Room
+                                      </button>
+                                      <button type="submit" class="btn btn-danger btn-block" ng-hide="CreateRoom.psw.$error.required || CreateRoom.psw.$error.pattern || !checkBoxValue.isPrivate" ng-click="createRoom()">
+                                          <span class="glyphicon glyphicon-lock"></span> 
+                                          Create Private Room
+                                      </button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
 
-						<div class="mastfoot">
-							<div class="inner">
-								<p>&copy;<a href="https://github.com/CodeMonkeys3111">CodeMonkeys</a> 2015, All Rights Reserved.</p>
-								<p>Powered by <a href="http://getbootstrap.com">Bootstrap</a>, <a href="https://twitter.com/mdo">@mdo</a>.</p>
-							</div>
-						</div>
-
-					</div>
-
+                        </div>
+                    </div>
 				</div>
 
-			</div>
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>&copy;<a href="https://github.com/CodeMonkeys3111">CodeMonkeys</a> 2015, All Rights Reserved.</p>
+                        <p>Powered by <a href="http://getbootstrap.com">Bootstrap</a>, <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-			<!-- Bootstrap core JavaScript
-			================================================== -->
-			<!-- Placed at the end of the document so the pages load faster -->
-			<script src="js/lib/jquery.min.js"></script>
-			<script src="js/lib/bootstrap.min.js"></script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
 
-			<!-- 1.4.2 -->
-			<script src="js/lib/angular.min.js"></script>
+    <!-- 1.4.2 -->
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/firebase.js"></script>
+    <script src="js/lib/angularfire.js"></script>
 
-			<script>
-			angular.module('app', [])
-			.controller('controller', ['$scope', '$location', '$window', function($scope, $location, $window) {
-				$scope.example = {
-					text: '',
-					word: /^\s*\w*\s*$/
-				};
-
-				$scope.join = function () {
-					$window.location.href = 'question.html#/' + $scope.example.text;
-				}
-			}]);
-			</script>
-		</body>
-		</html>
+    <script>
+        angular.module('app', ["firebase"])
+        .controller('controller', ['$scope', '$firebase', '$location', '$window', function($scope, $firebase, $location, $window) {
+            
+            var FirebaseURL = "https://cmkquestionsdb.firebaseio.com/roomList/";
+            //TEST ONLY
+            //var FirebaseURL = "https://questionstestdb.firebaseio.com/roomList/";
+            
+            $scope.roomName = {
+                text: "",
+                word: /^\s*\w*\s*$/
+            };
+            
+            $scope.newRoomName = {
+                text: "",
+                word: /^\s*\w*\s*$/
+            };
+            
+            var CheckURL = FirebaseURL; //+ $scope.newRoomName.text;
+            var roomRef = new Firebase(CheckURL);
+            
+            //get the value of the checkbox "Private Room?"
+            $scope.checkBoxValue = {
+                isPrivate: false
+            };
+            
+            //get password
+            $scope.PasswordBoxValue = {
+                Password: "",
+                checkValid: /^\s*\w*\s*$/
+            }
+            
+            $scope.createRoom = function () {
+                roomRef.once("value", function(snapshot){
+                    var found = false;  //set a value to check if room exists
+                    snapshot.forEach(function(childSnapshot){
+                        var room = childSnapshot.key(); 
+                        console.log(room);
+                        if ($scope.newRoomName.text === room){
+                            found = true;
+                            console.log(found);
+                        }
+                    });
+                    if (found === true) {
+                        $window.alert("This room already exists!");
+                        return;
+                    }
+                    var private = $scope.checkBoxValue.isPrivate;
+                    var pw = "";
+                    if (private === true){
+                        pw = $scope.PasswordBoxValue.Password;
+                    }
+                    else {
+                        pw = "";
+                    }
+                    roomRef.child($scope.newRoomName.text).set({
+                        isPrivate: private,
+                        password: pw
+                    });
+                    $scope.joinNew();
+                });
+                
+            }
+            $scope.join = function () {
+                roomRef.once("value", function(snapshot){
+                    var found = false;
+                    var reqPassword = false;
+                    snapshot.forEach(function(childSnapshot){
+                        var roomID = childSnapshot.key(); 
+                        var roomInfo = childSnapshot.val();
+                        // Room found, check if the room is a private room
+                        if ($scope.roomName.text === roomID){
+                            found = true;
+                            console.log("Room Found: "+found);
+                            // Room is private
+                            if (roomInfo.isPrivate === true){
+                                reqPassword = true;
+                                console.log(roomInfo.password);
+                                var input = $window.prompt("Password for this private room:");
+                                // debug: detecting user input
+                                console.log("Input: "+ input);
+                                // Password is correct, go to the room page
+                                if (input === roomInfo.password){
+                                    console.log("Correct!");
+                                    $window.location.href = 'question.html#/' + $scope.roomName.text;
+                                }
+                                // Password is not correct, do nothing but return an alert.
+                                else{
+                                    $window.alert("Password is invalid");
+                                }
+                            }
+                            // Room is public (NOT private), go to the room directly
+                            else{
+                                $window.location.href = 'question.html#/' + $scope.roomName.text;
+                            }
+                        }
+                    });
+                    // Room not found, return an alert
+                    if(!found){
+                        $window.alert("Room is not exist, click 'Create a New Room' to create a new room.");
+                    }
+                });
+            }
+            $scope.joinNew = function () {
+                $window.location.href = 'question.html#/' + $scope.newRoomName.text;
+            }
+        }]);
+    </script>
+</body>
+</html>
