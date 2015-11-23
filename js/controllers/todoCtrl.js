@@ -377,6 +377,13 @@ $scope.setSorting = function(predicate, predicateText){
 	$scope.predicateText = predicateText;
     $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
     $scope.predicate = predicate;
+	// }
+    alert($scope.predicate);
+};
+
+//Calculates hotness
+$scope.hotValue = function(todo) {
+   return -todo.timestamp - 7200000*(3*todo.like + 2*todo.replies + todo.dislike);
 };
 
 // Not sure what is this code. Todel
